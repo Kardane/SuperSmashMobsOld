@@ -1,0 +1,11 @@
+{
+    "providers":[
+        {
+            "type":"ttf",
+            "file":"hudtest:neodgm.ttf",
+            "shift":[0.0,17.5],
+            "size":8,
+            "oversample":4
+        }
+    ]
+}

@@ -1,0 +1,27 @@
+{
+  "schemaVersion": 1,
+  "id": "supersmashmob",
+  "version": "${version}",
+  "name": "SuperSmashMobs",
+  "description": "",
+  "authors": [],
+  "contact": {
+    "repo": "https://github.com/Admin/SuperSmashMobs"
+  },
+  "license": "All-Rights-Reserved",
+  "icon": "assets/SuperSmashMobs/icon.png",
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "org.karn.supersmashmobs.SuperSmashMobs"
+    ]
+  },
+  "mixins": [
+    "SuperSmashMobs.mixins.json"
+  ],
+  "depends": {
+    "fabricloader": "*",
+    "fabric": "*",
+    "minecraft": "*"
+  }
+}

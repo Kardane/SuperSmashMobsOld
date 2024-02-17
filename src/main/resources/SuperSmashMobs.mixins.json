@@ -1,0 +1,13 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "org.karn.supersmashmobs.mixin",
+  "compatibilityLevel": "JAVA_17",
+  "mixins": [
+    "PlayerMainMixin",
+    "LivingEntityMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

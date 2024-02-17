@@ -1,0 +1,36 @@
+{
+	"providers": [
+		{"type": "bitmap","file": "hudtest:font/gui/hotbar_up.png","ascent": -18,"height": 256,"chars": ["\u4000"]},
+		{"type": "bitmap","file": "hudtest:font/gui/hotbar_side.png","ascent": -22,"height": 256,"chars": ["\u4001"]},
+		{"type": "bitmap","file": "hudtest:font/gui/bar.png","ascent": -20,"height": 16,"chars": ["\u4002"]},
+		{"type": "bitmap","file": "hudtest:font/gui/xpbar.png","ascent": -29,"height": 16,"chars": ["\u4003"]},
+		{"type": "bitmap","file": "hudtest:font/gui/coin1.png","ascent": -28,"height": 7,"chars": ["\u4004"]},
+		{"type": "bitmap","file": "hudtest:font/gui/coin2.png","ascent": -28,"height": 7,"chars": ["\u4005"]},
+		{"type": "bitmap","file": "hudtest:font/gui/skill1.png","ascent": -45,"height": 16,"chars": ["\u4006"]},
+		{"type": "bitmap","file": "hudtest:font/gui/skill2.png","ascent": -45,"height": 16,"chars": ["\u4007"]},
+		{"type": "bitmap","file": "hudtest:font/gui/skill3.png","ascent": -45,"height": 16,"chars": ["\u4008"]},
+		{"type": "bitmap","file": "hudtest:font/gui/skill4.png","ascent": -45,"height": 16,"chars": ["\u4009"]},
+
+		{"type": "bitmap","file": "hudtest:font/gui/skillready3.png","ascent": -44,"height": 18,"chars": ["\u4119"]},
+		{"type": "bitmap","file": "hudtest:font/gui/skillready2.png","ascent": -44,"height": 18,"chars": ["\u4118"]},
+		{"type": "bitmap","file": "hudtest:font/gui/skillready1.png","ascent": -44,"height": 18,"chars": ["\u4117"]},
+		{"type": "bitmap","file": "hudtest:font/gui/cooldown16.png","ascent": -45,"height": 16,"chars": ["\u4116"]},
+		{"type": "bitmap","file": "hudtest:font/gui/cooldown15.png","ascent": -45,"height": 16,"chars": ["\u4115"]},
+		{"type": "bitmap","file": "hudtest:font/gui/cooldown14.png","ascent": -45,"height": 16,"chars": ["\u4114"]},
+		{"type": "bitmap","file": "hudtest:font/gui/cooldown13.png","ascent": -45,"height": 16,"chars": ["\u4113"]},
+		{"type": "bitmap","file": "hudtest:font/gui/cooldown12.png","ascent": -45,"height": 16,"chars": ["\u4112"]},
+		{"type": "bitmap","file": "hudtest:font/gui/cooldown11.png","ascent": -45,"height": 16,"chars": ["\u4111"]},
+		{"type": "bitmap","file": "hudtest:font/gui/cooldown10.png","ascent": -45,"height": 16,"chars": ["\u4110"]},
+		{"type": "bitmap","file": "hudtest:font/gui/cooldown9.png","ascent": -45,"height": 16,"chars": ["\u4109"]},
+		{"type": "bitmap","file": "hudtest:font/gui/cooldown8.png","ascent": -45,"height": 16,"chars": ["\u4108"]},
+		{"type": "bitmap","file": "hudtest:font/gui/cooldown7.png","ascent": -45,"height": 16,"chars": ["\u4107"]},
+		{"type": "bitmap","file": "hudtest:font/gui/cooldown6.png","ascent": -45,"height": 16,"chars": ["\u4106"]},
+		{"type": "bitmap","file": "hudtest:font/gui/cooldown5.png","ascent": -45,"height": 16,"chars": ["\u4105"]},
+		{"type": "bitmap","file": "hudtest:font/gui/cooldown4.png","ascent": -45,"height": 16,"chars": ["\u4104"]},
+		{"type": "bitmap","file": "hudtest:font/gui/cooldown3.png","ascent": -45,"height": 16,"chars": ["\u4103"]},
+		{"type": "bitmap","file": "hudtest:font/gui/cooldown2.png","ascent": -45,"height": 16,"chars": ["\u4102"]},
+		{"type": "bitmap","file": "hudtest:font/gui/cooldown1.png","ascent": -45,"height": 16,"chars": ["\u4101"]},
+		{"type": "bitmap","file": "hudtest:font/gui/cooldown0.png","ascent": -45,"height": 16,"chars": ["\u4100"]}
+
+	]
+}
