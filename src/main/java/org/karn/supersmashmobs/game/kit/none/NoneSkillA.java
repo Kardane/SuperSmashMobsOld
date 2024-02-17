@@ -12,7 +12,7 @@ public class NoneSkillA extends AbstractSkill {
     public static String id = "none_a";
     public static String name = "NoneSkillA";
     public static String desc = "Skill A of None Kit";
-    public static Integer cooldown = 10;
+    public static Integer cooldown = 100;
     public static SkillType type = SkillType.UTILITY;
     public NoneSkillA(){
         super(id, name, desc, cooldown, type);

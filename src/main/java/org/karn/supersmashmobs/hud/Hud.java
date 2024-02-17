@@ -3,11 +3,13 @@ package org.karn.supersmashmobs.hud;
 import net.minecraft.entity.attribute.EntityAttribute;
 import net.minecraft.entity.attribute.EntityAttributes;
 import net.minecraft.entity.effect.StatusEffects;
+import net.minecraft.item.Items;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Style;
 import net.minecraft.text.Text;
 import net.minecraft.text.TextColor;
+import net.minecraft.util.Formatting;
 import net.minecraft.util.Identifier;
 import org.karn.supersmashmobs.api.HudApi;
 import org.karn.supersmashmobs.game.MainGame;
@@ -21,6 +23,10 @@ public class Hud {
     public static Style guiStyle = emptyStyle.withFont(new Identifier(MODID,"gui")).withColor(TextColor.parse("#4e5c24"));
     public static Style guiDisplayStyle = emptyStyle.withFont(new Identifier(MODID,"gui_display")).withColor(TextColor.parse("#4e5c24"));
     public static Style guiSkillStyle = emptyStyle.withFont(new Identifier(MODID,"gui_skillcool")).withColor(TextColor.parse("#4e5c24"));
+    public static Style guiStat1 = emptyStyle.withFont(new Identifier(MODID,"gui_stat1")).withColor(TextColor.parse("#4e5c24"));
+    public static Style guiStat2 = emptyStyle.withFont(new Identifier(MODID,"gui_stat2")).withColor(TextColor.parse("#4e5c24"));
+    public static Style guiStat3 = emptyStyle.withFont(new Identifier(MODID,"gui_stat3")).withColor(TextColor.parse("#4e5c24"));
+    public static Style guiHealth = emptyStyle.withFont(new Identifier(MODID,"gui_health")).withColor(TextColor.parse("#4e5c24"));
     public static Text hotbarUp = Text.literal("\u4000").setStyle(guiStyle);
 
     //
@@ -40,7 +46,7 @@ public class Hud {
     public static int BIGDEALWAITTICK = 6;
     public static Text getHud(ServerPlayerEntity player){
         HudApi a = (HudApi) player;
-        return Text.translatable("space.6")//전체 오프셋 조절
+        return Text.translatable("space.-68")//전체 오프셋 조절
                 .append(buildHealthBar(player,a.getHurtValue()))
                 .append(hotbarUp)
                 .append(buildStat(player))
@@ -94,64 +100,108 @@ public class Hud {
 
     private static MutableText buildStat(ServerPlayerEntity player){
         HudApi a = (HudApi) player;
-        MutableText base = Text.empty();
-        base.append(Text.translatable("space.-2"))
+        var dmg = (int) player.getAttributeValue(SSMAttributes.ATTACK_DMG);
+        var as = (int) player.getAttributeValue(SSMAttributes.ATTACK_SPEED);
+        var speed = player.getAttributeValue(EntityAttributes.GENERIC_MOVEMENT_SPEED);
+        var regen = (int) player.getAttributeValue(SSMAttributes.HEALTH_REGEN);
+        var knockback = (int) player.getAttributeValue(SSMAttributes.KNOCKBACK_TAKEN);
+        var protection = (int) player.getAttributeValue(SSMAttributes.PROTECTION);
+        int b = String.valueOf(dmg).length();
+        int c = String.valueOf(as%20).length();
+        int d = String.valueOf(speed).length();
+        int e = String.valueOf(regen).length();
+        int f = String.valueOf(knockback).length();
+        int g = String.valueOf(protection - 100).length();
+        MutableText base = Text.empty()
+                .append(Text.translatable("space.-39"))
+                .append(Text.literal("\u4101").setStyle(guiStyle));
+
+        //life
+        if(MainGame.joinedPlayer.get(player) == null) {
+            base.append(Text.literal(" ?").setStyle(guiHealth));
+        } else {
+            base.append(Text.literal(" "+MainGame.joinedPlayer.get(player)).setStyle(guiHealth));
+        }
+
+        //icon
+        base.append(Text.translatable("space.6"))
                 .append(Text.literal(a.getKit().icon).setStyle(guiStyle))
-                .append("❤ "+ MainGame.joinedPlayer.get(player))
-                .append("\uD83D\uDDE1"+(int) player.getAttributeValue(SSMAttributes.ATTACK_DMG))
-                .append("⛏"+(int) player.getAttributeValue(SSMAttributes.ATTACK_SPEED))
-                .append("\uD83D\uDEE1"+((int) player.getAttributeValue(SSMAttributes.PROTECTION) - 100))
-                .append("⚓"+(int) player.getAttributeValue(SSMAttributes.KNOCKBACK_TAKEN))
-                .append("\uD83E\uDD7E"+(int) player.getAttributeValue(EntityAttributes.GENERIC_MOVEMENT_SPEED))
-                .append("\uD83D\uDC95"+(int)  player.getAttributeValue(SSMAttributes.HEALTH_REGEN))
+                .append(Text.translatable("space.-1"))
+                .append(Text.literal("\u4100").setStyle(guiStyle))
+                .append(Text.translatable("space.-76"))
+
+                .append(Text.literal("\u4102").setStyle(guiStyle))
+                .append(Text.literal(String.valueOf(dmg)).setStyle(guiStat1))
+                .append(Text.translatable("space."+(12+4 - (b-1)*6)))//dmg
+
+                .append(Text.literal("\u4103").setStyle(guiStyle))
+                .append(Text.literal(String.valueOf(as/20)).setStyle(guiStat1))
+                .append(Text.translatable("space.-4"))
+                .append(Text.literal(".").setStyle(guiStat1))
+                .append(Text.translatable("space.1"))
+                .append(Text.literal(String.valueOf(as%20)).setStyle(guiStat1))
+                .append(Text.translatable("space.-"+(63 + (c-1)*6)))//as
+
+
+                .append(Text.literal("\u4104").setStyle(guiStyle))
+                .append(Text.literal(String.valueOf(protection - 100)).setStyle(guiStat2))
+                .append(Text.translatable("space."+(12+4 - (g-1)*6)))//protection
+
+                .append(Text.literal("\u4105").setStyle(guiStyle))
+                .append(Text.literal(String.valueOf(knockback)).setStyle(guiStat2))
+                .append(Text.translatable("space.-"+(52 + (f-1)*6)))//knockback
+
+                .append(Text.literal("\u4106").setStyle(guiStyle))
+                .append(Text.literal((String.valueOf((int) Math.floor(speed*100)/10))).setStyle(guiStat3))
+                .append(Text.translatable("space.-4"))
+                .append(Text.literal(".").setStyle(guiStat3))
+                .append(Text.translatable("space.1"))
+                .append(Text.literal(String.valueOf((int) Math.floor(speed*100)%10)).setStyle(guiStat3))
+                .append(Text.translatable("space.8"))
+
+                .append(Text.literal("\u4107").setStyle(guiStyle))
+                .append(Text.literal(String.valueOf(regen)).setStyle(guiStat3))
         ;
         return base;
     }
 
     private static MutableText buildCooldown(ServerPlayerEntity player){
         HudApi a = (HudApi) player;
-        MutableText base = Text.empty().append(Text.translatable("space.-180"));
-        base.append(Text.literal("\u4006").setStyle(guiStyle))
-                .append(getCooldownDisplay(a.getSkillCoolA()))
-                .append(Text.translatable("space.2"));
-
-        base.append(Text.literal("\u4007").setStyle(guiStyle))
+        MutableText base = Text.empty().append(Text.translatable("space.-244"));
+        base.append(getCooldownDisplay(a.getSkillCoolA()))
+                .append(Text.translatable("space.1"))
                 .append(getCooldownDisplay(a.getSkillCoolB()))
-                .append(Text.translatable("space.2"));
-
-        base.append(Text.literal("\u4008").setStyle(guiStyle))
+                .append(Text.translatable("space.1"))
                 .append(getCooldownDisplay(a.getSkillCoolC()))
-                .append(Text.translatable("space.2"));
+                .append(Text.translatable("space.1"));
 
-        base.append(Text.literal("\u4009").setStyle(guiStyle))
-                .append(getCooldownDisplay(a.getSkillCoolD()))
-                .append(Text.translatable("space.2"));
-        return base;
+        if(player.getMainHandStack().isOf(Items.NETHER_STAR)){
+            base.append(Text.translatable("space.32"))
+                    .append(Text.literal("\u4108").setStyle(guiStyle))
+                    .append(Text.literal("사용가능").setStyle(guiSkillStyle).formatted(Formatting.GREEN));
+        } else {
+            base.append(Text.translatable("space.32"))
+                    .append(Text.literal("\u4108").setStyle(guiStyle))
+                    .append(Text.literal("사용불가").setStyle(guiSkillStyle).formatted(Formatting.RED));
+        }
+        base.append(Text.translatable("space.-64"));
+
+        return base.append(Text.translatable("space.-"+(1 + (String.valueOf(a.getSkillCoolA()/20).length()-1)*8 + (String.valueOf(a.getSkillCoolB()/20).length()-1)*8 + (String.valueOf(a.getSkillCoolC()/20).length()-1)*8) ));
     }
 
     private static MutableText getCooldownDisplay(int cooldown){
         MutableText base = Text.empty();
-        if(cooldown > 19){
+        if(cooldown > 0){
             int a = cooldown/20;
             int b = String.valueOf(a).length();
-            base.append(Text.translatable("space.-17"))
-                    .append(Text.literal("\u4116").setStyle(guiStyle))
-                    .append(Text.translatable("space.-"+(11 + (b-1) * 5 - (b-1))))//두자리수 9 //한자리수 11 //세자리수8
-                    .append(Text.literal(String.valueOf(cooldown/20)).setStyle(guiSkillStyle))
-                    .append(Text.translatable("space."+(11 - 6 - (b-1) - (b-1))));
-            return base;
-        } else if (cooldown > 0){
-            double a = cooldown * 0.05;
-            base.append(Text.translatable("space.-17"))
-                    .append(Text.literal("\u4116").setStyle(guiStyle))
-                    .append(Text.translatable("space.-16"))
-                    .append(Text.literal("0").setStyle(guiSkillStyle))
-                    .append(Text.translatable("space.-4"))
-                    .append(Text.literal("."+String.valueOf(a).charAt(2)).setStyle(guiSkillStyle))
-                    .append(Text.translatable("space.2"));
-            return base;
-        } else {
-            return base;
+            return base.append(Text.literal("[").setStyle(guiSkillStyle).formatted(Formatting.RED))
+                    .append(Text.literal(String.valueOf(a)).setStyle(guiSkillStyle).formatted(Formatting.RED))
+                    .append(Text.translatable("space.-5"))
+                    .append(Text.literal("]").setStyle(guiSkillStyle).formatted(Formatting.RED));
+        }else {
+            return base.append(Text.literal("[0").setStyle(guiSkillStyle))
+                    .append(Text.translatable("space.-5"))
+                    .append(Text.literal("]").setStyle(guiSkillStyle));
         }
     }
 }
