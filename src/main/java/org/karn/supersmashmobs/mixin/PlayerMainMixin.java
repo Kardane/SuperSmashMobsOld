@@ -106,13 +106,4 @@ public class PlayerMainMixin implements HudApi {
             ci.cancel();
         }
     }
-
-    @Inject(method = "onDisconnect", at = @At("TAIL"))
-    private void checkGame(CallbackInfo ci) {
-        if(!player.getWorld().isClient){
-            if(MainGame.joinedPlayer.containsKey(player)){
-                MainGame.joinedPlayer.remove(player,0);
-            }
-        }
-    }
 }

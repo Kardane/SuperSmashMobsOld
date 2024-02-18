@@ -14,7 +14,7 @@ public class GameCommand {
                 .requires(source -> source.hasPermissionLevel(4))
                 .then(CommandManager.literal("start")
                         .executes(ctx->{
-                            MainGame.startGame(ctx.getSource().getServer());
+                            MainGame.prepareGame(ctx.getSource().getServer());
                             return 1;
                         })
                 )

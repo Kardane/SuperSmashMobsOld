@@ -46,7 +46,7 @@ public class Hud {
     public static int BIGDEALWAITTICK = 6;
     public static Text getHud(ServerPlayerEntity player){
         HudApi a = (HudApi) player;
-        return Text.translatable("space.-68")//전체 오프셋 조절
+        return Text.translatable("space.-103")//전체 오프셋 조절
                 .append(buildHealthBar(player,a.getHurtValue()))
                 .append(hotbarUp)
                 .append(buildStat(player))
@@ -124,7 +124,7 @@ public class Hud {
         }
 
         //icon
-        base.append(Text.translatable("space.6"))
+        base.append(Text.translatable("space.5"))
                 .append(Text.literal(a.getKit().icon).setStyle(guiStyle))
                 .append(Text.translatable("space.-1"))
                 .append(Text.literal("\u4100").setStyle(guiStyle))
@@ -167,7 +167,7 @@ public class Hud {
 
     private static MutableText buildCooldown(ServerPlayerEntity player){
         HudApi a = (HudApi) player;
-        MutableText base = Text.empty().append(Text.translatable("space.-244"));
+        MutableText base = Text.empty().append(Text.translatable("space.-248"));
         base.append(getCooldownDisplay(a.getSkillCoolA()))
                 .append(Text.translatable("space.1"))
                 .append(getCooldownDisplay(a.getSkillCoolB()))
@@ -176,11 +176,11 @@ public class Hud {
                 .append(Text.translatable("space.1"));
 
         if(player.getMainHandStack().isOf(Items.NETHER_STAR)){
-            base.append(Text.translatable("space.32"))
+            base.append(Text.translatable("space.1"))
                     .append(Text.literal("\u4108").setStyle(guiStyle))
                     .append(Text.literal("사용가능").setStyle(guiSkillStyle).formatted(Formatting.GREEN));
         } else {
-            base.append(Text.translatable("space.32"))
+            base.append(Text.translatable("space.1"))
                     .append(Text.literal("\u4108").setStyle(guiStyle))
                     .append(Text.literal("사용불가").setStyle(guiSkillStyle).formatted(Formatting.RED));
         }
