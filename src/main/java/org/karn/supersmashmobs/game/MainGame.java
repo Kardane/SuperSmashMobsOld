@@ -2,6 +2,8 @@ package org.karn.supersmashmobs.game;
 
 import net.minecraft.entity.attribute.EntityAttribute;
 import net.minecraft.entity.attribute.EntityAttributes;
+import net.minecraft.entity.boss.BossBar;
+import net.minecraft.entity.boss.CommandBossBar;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.PlayerManager;
@@ -10,6 +12,7 @@ import net.minecraft.sound.SoundEvents;
 import net.minecraft.text.Text;
 import net.minecraft.text.TextColor;
 import net.minecraft.util.Formatting;
+import net.minecraft.util.Identifier;
 import net.minecraft.util.math.Vec2f;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.GameMode;
@@ -26,6 +29,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
+
+import static org.karn.supersmashmobs.SuperSmashMobs.MODID;
 
 public class MainGame {
     public static boolean isPlaying = false;
@@ -50,7 +55,7 @@ public class MainGame {
         TimerTask task4 = new TimerTask() {
             public void run() {
                 misc.playSoundToAll(server, SoundEvents.BLOCK_NOTE_BLOCK_BELL.value(), SoundCategory.MASTER,2,0.75F);
-                MessageSender.sendTitleAll(server, Text.literal("4").formatted(Formatting.GREEN),null);
+                MessageSender.sendTitleAll(server, Text.literal("4").formatted(Formatting.GREEN),Text.literal("가만히 계세요"));
             }
         };
         count4.schedule(task4, 40*50);
@@ -59,7 +64,7 @@ public class MainGame {
         TimerTask task3 = new TimerTask() {
             public void run() {
                 misc.playSoundToAll(server, SoundEvents.BLOCK_NOTE_BLOCK_BELL.value(), SoundCategory.MASTER,2,1F);
-                MessageSender.sendTitleAll(server, Text.literal("3").formatted(Formatting.YELLOW), null);
+                MessageSender.sendTitleAll(server, Text.literal("3").formatted(Formatting.YELLOW), Text.literal("가만히 계세요"));
             }
         };
         count3.schedule(task3, 60*50);
@@ -68,7 +73,7 @@ public class MainGame {
         TimerTask task2 = new TimerTask() {
             public void run() {
                 misc.playSoundToAll(server, SoundEvents.BLOCK_NOTE_BLOCK_BELL.value(), SoundCategory.MASTER,2,1.5F);
-                MessageSender.sendTitleAll(server, Text.literal("2").formatted(Formatting.GOLD), null);
+                MessageSender.sendTitleAll(server, Text.literal("2").formatted(Formatting.GOLD), Text.literal("가만히 계세요"));
             }
         };
         count2.schedule(task2, 80*50);
@@ -77,7 +82,7 @@ public class MainGame {
         TimerTask task1 = new TimerTask() {
             public void run() {
                 misc.playSoundToAll(server, SoundEvents.BLOCK_NOTE_BLOCK_BELL.value(), SoundCategory.MASTER,2,2F);
-                MessageSender.sendTitleAll(server, Text.literal("1").formatted(Formatting.RED), null);
+                MessageSender.sendTitleAll(server, Text.literal("1").formatted(Formatting.RED), Text.literal("가만히 계세요"));
             }
         };
         count1.schedule(task1, 100*50);
@@ -98,6 +103,12 @@ public class MainGame {
         border.setSafeZone(0);
         border.setWarningBlocks(5);
         border.setMaxRadius(1000);
+
+        CommandBossBar bar = server.getBossBarManager().add(new Identifier(MODID,"crystal"),Text.literal("스매시 크리스탈 재생성"));
+        bar.setColor(BossBar.Color.PINK);
+        bar.setValue(0);
+        bar.setMaxValue(300);
+        bar.addPlayers(server.getPlayerManager().getPlayerList());
 
         setGamerule(server);
         setPlayerLife(server);
@@ -123,6 +134,7 @@ public class MainGame {
         MessageSender.sendMsgAll(server, GameMessages.getGameStartMsg());
         isPlaying = true;
         updateGame(server);
+        SmashCrystal.tick(server);
         //tickGame(server);
     }
 
@@ -131,6 +143,10 @@ public class MainGame {
         WorldBorder border = server.getOverworld().getWorldBorder();
         border.setCenter(ringPos.x,ringPos.y);
         border.setMaxRadius(1000);
+        if(server.getBossBarManager().get(new Identifier(MODID,"crystal")) != null){
+            server.getBossBarManager().remove(server.getBossBarManager().get(new Identifier(MODID,"crystal")));
+        }
+
         MessageSender.sendMsgAll(server,GameMessages.getGameStopMsg());
         server.getPlayerManager().getPlayerList().forEach(p->{
             p.heal(10000);
@@ -235,5 +251,6 @@ public class MainGame {
         rules.get(GameRules.SPAWN_RADIUS).set(0,server);
         rules.get(GameRules.FALL_DAMAGE).set(false,server);
         rules.get(GameRules.SPECTATORS_GENERATE_CHUNKS).set(false,server);
+        rules.get(GameRules.LOG_ADMIN_COMMANDS).set(false,server);
     }
 }

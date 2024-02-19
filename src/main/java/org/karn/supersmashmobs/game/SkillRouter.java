@@ -1,5 +1,6 @@
 package org.karn.supersmashmobs.game;
 
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.server.network.ServerPlayerEntity;
 import org.karn.supersmashmobs.api.HudApi;
 import org.karn.supersmashmobs.game.kit.none.NoneSkillA;
@@ -81,5 +82,23 @@ public class SkillRouter {
                 break;
         }
 
+    }
+
+    public static void routeSmash(PlayerEntity player){
+        HudApi a = (HudApi) player;
+        switch (a.getKit().getId()){
+            case "none":
+                break;
+            case "creeper":
+                break;
+            case "enderman":
+                break;
+            case "skeleton":
+                break;
+            case "spider":
+                break;
+            case "zombie":
+                break;
+        }
     }
 }

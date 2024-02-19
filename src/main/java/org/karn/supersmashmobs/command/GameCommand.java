@@ -7,6 +7,7 @@ import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.text.Text;
 import org.karn.supersmashmobs.api.HudApi;
 import org.karn.supersmashmobs.game.MainGame;
+import org.karn.supersmashmobs.game.SmashCrystal;
 
 public class GameCommand {
     public static void register(CommandDispatcher<ServerCommandSource> dispatcher) {
@@ -39,6 +40,12 @@ public class GameCommand {
                 .then(CommandManager.literal("currentPlayerStatus")
                         .executes(ctx->{
                             MainGame.getPlayerStatus(ctx.getSource().getServer());
+                            return 1;
+                        })
+                )
+                .then(CommandManager.literal("summonCrystal")
+                        .executes(ctx->{
+                            SmashCrystal.startSpawn(ctx.getSource().getServer());
                             return 1;
                         })
                 )

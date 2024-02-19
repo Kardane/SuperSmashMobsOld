@@ -2,6 +2,7 @@ package org.karn.supersmashmobs.mixin;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.damage.DamageSource;
+import net.minecraft.entity.damage.DamageTypes;
 import net.minecraft.server.network.ServerPlayerEntity;
 import org.karn.supersmashmobs.api.HudApi;
 import org.karn.supersmashmobs.game.kit.AbstractKit;
@@ -69,6 +70,7 @@ public class PlayerMainMixin implements HudApi {
 
     @Inject(method = "damage", at = @At("HEAD"), cancellable = true)
     private void addHurtValue(DamageSource source, float amount, CallbackInfoReturnable<Boolean> cir) {
+        if(source.isOf(DamageTypes.FIREWORKS)) cir.setReturnValue(false);;
         if(!misc.isVoidDamage(source) && !player.getWorld().isClient) {
             float finalAmount = (float) (amount * player.getAttributeValue(SSMAttributes.PROTECTION)/100);
             player.hurtTime = 0;

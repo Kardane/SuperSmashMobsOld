@@ -81,10 +81,10 @@ public class PlayerTick {
         player.setHealth(player.getMaxHealth());
         player.clearStatusEffects();
         player.changeGameMode(GameMode.SPECTATOR);
-
         player.playSound(SoundEvents.ENTITY_GENERIC_EXPLODE, SoundCategory.MASTER,2,1.5F);
         player.getServerWorld().spawnParticles(new DustParticleEffect(new Vector3f(1,1,0.33F),3),player.getX(),player.getY(),player.getZ(),200,0.1,5,0.1,0);
 
+        player.teleport(0,70,0);
         if(life > 1){
             MessageSender.sendTitle(player, GameMessages.getDeathMsg(life-1),GameMessages.getReviveMsg(true));
             Timer timer = new Timer();

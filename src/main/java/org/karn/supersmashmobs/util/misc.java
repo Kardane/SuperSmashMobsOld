@@ -29,6 +29,9 @@ public class misc {
     public static boolean isVoidDamage(DamageSource source){
         return source.isOf(DamageTypes.GENERIC_KILL) || source.isOf(DamageTypes.GENERIC) || source.isOf(DamageTypes.OUT_OF_WORLD)|| source.isOf(DamageTypes.FALL);
     }
+    public static int randomInt(int min, int max){
+        return (int) (Math.random() * (max - min + 1)) + min;
+    }
 
     public static boolean hasBindEffect(ServerPlayerEntity player){
         var map = player.getActiveStatusEffects();

@@ -24,7 +24,8 @@ public class KitCommand {
                         )
                 .then(CommandManager.literal("none")
                         .executes(ctx->{
-                            HudApi a = (HudApi) ctx.getSource().getEntity();
+                            var player = ctx.getSource().getPlayerOrThrow();
+                            HudApi a = (HudApi) player;
                             a.setKit(new NoneKit());
                             ctx.getSource().sendMessage(Text.of("Kit changed to None"));
                             return 1;

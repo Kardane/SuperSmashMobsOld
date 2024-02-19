@@ -10,6 +10,7 @@ import net.minecraft.network.packet.s2c.play.TitleS2CPacket;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
+import net.minecraft.util.Formatting;
 import org.jetbrains.annotations.Nullable;
 import org.karn.supersmashmobs.game.MainGame;
 
@@ -36,12 +37,19 @@ public class MessageSender {
         } else {
             sourceName = source.getName();
         }
-        Text killlog = Text.empty().append(player.getName()).append(" << "+sourceName+" | 남은 목숨: "+(MainGame.joinedPlayer.get(player)-1));
+        int life = MainGame.joinedPlayer.get(player)-1;
+        if(!MainGame.isPlaying) life = 0;
+        Text killlog = Text.empty()
+                .append(Text.literal("<"+player.getEntityName()+">").formatted(Formatting.RED).formatted(Formatting.BOLD))
+                .append(Text.literal(" ⏪☠⏪ ").formatted(Formatting.YELLOW))
+                .append(Text.literal("<"+sourceName+">").formatted(Formatting.RED).formatted(Formatting.BOLD))
+                .append(Text.literal(" | ").formatted(Formatting.DARK_GRAY))
+                .append("남은 목숨: "+life).formatted(Formatting.GRAY);
         sendMsgAll(player.getServer(),killlog);
     }
 
     public static void sendTitle(ServerPlayerEntity player, Text title, @Nullable Text subtitle){
-        player.networkHandler.sendPacket(new TitleFadeS2CPacket(0,60,0));
+        player.networkHandler.sendPacket(new TitleFadeS2CPacket(0,100,0));
         player.networkHandler.sendPacket(new TitleS2CPacket(title));
         if(subtitle == null)
             player.networkHandler.sendPacket(new SubtitleS2CPacket(Text.empty()));

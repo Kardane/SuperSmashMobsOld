@@ -4,6 +4,8 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
+import net.minecraft.util.math.Vec2f;
+import net.minecraft.util.math.Vec3d;
 
 public class GameMessages {
     public static MutableText MODNAMETEXT = Text.empty().append(Text.literal("[SSM] ").formatted(Formatting.YELLOW).formatted(Formatting.BOLD));
@@ -26,6 +28,11 @@ public class GameMessages {
     public static Text getGameStopMsg(){
         return Text.empty().append(Text.literal("[SSM] ").formatted(Formatting.YELLOW).formatted(Formatting.BOLD))
                 .append(Text.literal("게임 종료!").formatted(Formatting.RED).formatted(Formatting.BOLD));
+    }
+
+    public static Text getCrystalMsg(Vec2f pos){
+        return Text.empty().append(Text.literal("[SSM] ").formatted(Formatting.YELLOW).formatted(Formatting.BOLD))
+                .append(Text.literal("스매시 크리스탈이 [" + (int) pos.x + ","+ (int) pos.y + "] 에 소환됩니다!").formatted(Formatting.LIGHT_PURPLE).formatted(Formatting.BOLD));
     }
 
     public static Text getWinnerMsg(PlayerEntity player){

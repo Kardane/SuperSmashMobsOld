@@ -3,11 +3,18 @@ package org.karn.supersmashmobs;
 import eu.pb4.polymer.resourcepack.api.PolymerResourcePackUtils;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
+import net.fabricmc.fabric.api.event.player.UseItemCallback;
 import net.fabricmc.fabric.api.networking.v1.ServerLoginConnectionEvents;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
+import net.minecraft.util.ActionResult;
+import net.minecraft.util.TypedActionResult;
 import net.minecraft.world.GameMode;
 import org.karn.supersmashmobs.command.KitCommand;
 import org.karn.supersmashmobs.game.MainGame;
+import org.karn.supersmashmobs.game.SkillRouter;
+import org.karn.supersmashmobs.game.SmashCrystal;
 import org.karn.supersmashmobs.game.kit.KitRegistry;
 import org.karn.supersmashmobs.registry.SSMAttributes;
 import org.karn.supersmashmobs.command.GameCommand;
@@ -30,15 +37,22 @@ public class SuperSmashMobs implements ModInitializer {
             KitCommand.register(dispatcher);
         });
         ServerPlayConnectionEvents.JOIN.register((handler, sender, server) -> {
-            if(MainGame.getGameStatus()){
+            if(MainGame.isPlaying){
                 handler.player.changeGameMode(GameMode.SPECTATOR);
             }
         });
         ServerPlayConnectionEvents.DISCONNECT.register((handler, server) -> {
-            if(MainGame.getGameStatus()){
+            if(MainGame.isPlaying){
                 MainGame.joinedPlayer.remove(handler.player);
                 MainGame.updateGame(server);
             }
+        });
+        UseItemCallback.EVENT.register((player, world, hand) -> {
+            if(!player.isSpectator() && player.getMainHandStack().isOf(Items.NETHER_STAR)){
+                SkillRouter.routeSmash(player);
+                player.getMainHandStack().setCount(0);
+            }
+            return TypedActionResult.pass(player.getMainHandStack());
         });
     }
 }
