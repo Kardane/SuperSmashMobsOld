@@ -5,6 +5,7 @@ import net.minecraft.entity.attribute.EntityAttributes;
 import net.minecraft.entity.boss.BossBar;
 import net.minecraft.entity.boss.CommandBossBar;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.network.packet.s2c.play.StopSoundS2CPacket;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.PlayerManager;
 import net.minecraft.sound.SoundCategory;
@@ -20,15 +21,14 @@ import net.minecraft.world.GameRules;
 import net.minecraft.world.border.WorldBorder;
 import org.karn.supersmashmobs.api.HudApi;
 import org.karn.supersmashmobs.registry.SSMAttributes;
+import org.karn.supersmashmobs.registry.SSMSounds;
 import org.karn.supersmashmobs.util.GameMessages;
 import org.karn.supersmashmobs.util.MessageSender;
 import org.karn.supersmashmobs.util.misc;
 
 import javax.management.Attribute;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Timer;
-import java.util.TimerTask;
+import java.time.LocalDate;
+import java.util.*;
 
 import static org.karn.supersmashmobs.SuperSmashMobs.MODID;
 
@@ -40,79 +40,85 @@ public class MainGame {
     public static boolean getGameStatus(){
         return isPlaying;
     }
+    public static UUID gameUUID = null;
 
     public static void prepareGame(MinecraftServer server){
         Timer count5 = new Timer();
         TimerTask task5 = new TimerTask() {
             public void run() {
-                misc.playSoundToAll(server, SoundEvents.BLOCK_NOTE_BLOCK_BELL.value(), SoundCategory.MASTER,2,0.5F);
+                misc.playSoundToAll(server, SSMSounds.COUNTDOWN_5, SoundCategory.MASTER,2,1F);
                 MessageSender.sendTitleAll(server, Text.literal("5").formatted(Formatting.DARK_GREEN), Text.literal("가만히 계세요"));
             }
         };
         count5.schedule(task5, 20*50);
 
-        Timer count4 = new Timer();
         TimerTask task4 = new TimerTask() {
             public void run() {
-                misc.playSoundToAll(server, SoundEvents.BLOCK_NOTE_BLOCK_BELL.value(), SoundCategory.MASTER,2,0.75F);
+                misc.playSoundToAll(server, SSMSounds.COUNTDOWN_4, SoundCategory.MASTER,2,1F);
                 MessageSender.sendTitleAll(server, Text.literal("4").formatted(Formatting.GREEN),Text.literal("가만히 계세요"));
             }
         };
-        count4.schedule(task4, 40*50);
+        count5.schedule(task4, 40*50);
 
-        Timer count3 = new Timer();
         TimerTask task3 = new TimerTask() {
             public void run() {
-                misc.playSoundToAll(server, SoundEvents.BLOCK_NOTE_BLOCK_BELL.value(), SoundCategory.MASTER,2,1F);
+                misc.playSoundToAll(server, SSMSounds.COUNTDOWN_3, SoundCategory.MASTER,2,1F);
                 MessageSender.sendTitleAll(server, Text.literal("3").formatted(Formatting.YELLOW), Text.literal("가만히 계세요"));
             }
         };
-        count3.schedule(task3, 60*50);
+        count5.schedule(task3, 60*50);
 
-        Timer count2 = new Timer();
         TimerTask task2 = new TimerTask() {
             public void run() {
-                misc.playSoundToAll(server, SoundEvents.BLOCK_NOTE_BLOCK_BELL.value(), SoundCategory.MASTER,2,1.5F);
+                misc.playSoundToAll(server, SSMSounds.COUNTDOWN_2, SoundCategory.MASTER,2,1F);
                 MessageSender.sendTitleAll(server, Text.literal("2").formatted(Formatting.GOLD), Text.literal("가만히 계세요"));
             }
         };
-        count2.schedule(task2, 80*50);
+        count5.schedule(task2, 80*50);
 
-        Timer count1 = new Timer();
         TimerTask task1 = new TimerTask() {
             public void run() {
-                misc.playSoundToAll(server, SoundEvents.BLOCK_NOTE_BLOCK_BELL.value(), SoundCategory.MASTER,2,2F);
+                misc.playSoundToAll(server, SSMSounds.COUNTDOWN_1, SoundCategory.MASTER,2,1F);
                 MessageSender.sendTitleAll(server, Text.literal("1").formatted(Formatting.RED), Text.literal("가만히 계세요"));
             }
         };
-        count1.schedule(task1, 100*50);
+        count5.schedule(task1, 100*50);
 
-        Timer timer = new Timer();
+        TimerTask prepareTask = new TimerTask() {
+            public void run() {
+                misc.playSoundToAll(server, SSMSounds.COUNTDOWN_READY, SoundCategory.MASTER,2,1F);
+            }
+        };
+        count5.schedule(prepareTask, 115*50);
+
         TimerTask task = new TimerTask() {
             public void run() {
                 startGame(server);
+                BGMManager.playBGM(server,BGMManager.shuffleMap(BGMManager.makeBGMList()), gameUUID);
+                misc.playSoundToAll(server, SSMSounds.COUNTDOWN_GO, SoundCategory.MASTER,2,1F);
             }
         };
-        timer.schedule(task, 120*50);
+        count5.schedule(task, 130*50);
     }
 
     public static void startGame(MinecraftServer server){
+        gameUUID = UUID.randomUUID();
         WorldBorder border = server.getOverworld().getWorldBorder();
         border.setCenter(ringPos.x,ringPos.y);
         border.setDamagePerBlock(0);
         border.setSafeZone(0);
         border.setWarningBlocks(5);
         border.setMaxRadius(1000);
-
         CommandBossBar bar = server.getBossBarManager().add(new Identifier(MODID,"crystal"),Text.literal("스매시 크리스탈 재생성"));
         bar.setColor(BossBar.Color.PINK);
         bar.setValue(0);
         bar.setMaxValue(300);
         bar.addPlayers(server.getPlayerManager().getPlayerList());
-
         setGamerule(server);
         setPlayerLife(server);
-        misc.spreadPlayers(server,joinedPlayer,ringPos,16,150,200);
+        System.out.println(System.currentTimeMillis());
+        misc.spreadPlayers(server,joinedPlayer,ringPos,16,80,60);
+        System.out.println(System.currentTimeMillis());
         server.getPlayerManager().getPlayerList().forEach(p->{
             p.changeGameMode(GameMode.ADVENTURE);
             HudApi a = (HudApi) p;
@@ -129,6 +135,7 @@ public class MainGame {
             p.getAttributeInstance(EntityAttributes.GENERIC_MOVEMENT_SPEED).setBaseValue(a.getKit().Speed);
             p.heal(10000);
             p.clearStatusEffects();
+            p.networkHandler.sendPacket(new StopSoundS2CPacket(null, null));
             p.playSound(SoundEvents.ENTITY_ENDER_DRAGON_GROWL, SoundCategory.MASTER,1,1F);
         });
         MessageSender.sendMsgAll(server, GameMessages.getGameStartMsg());
@@ -144,11 +151,13 @@ public class MainGame {
         border.setCenter(ringPos.x,ringPos.y);
         border.setMaxRadius(1000);
         if(server.getBossBarManager().get(new Identifier(MODID,"crystal")) != null){
+            server.getBossBarManager().get(new Identifier(MODID,"crystal")).clearPlayers();
             server.getBossBarManager().remove(server.getBossBarManager().get(new Identifier(MODID,"crystal")));
         }
 
         MessageSender.sendMsgAll(server,GameMessages.getGameStopMsg());
         server.getPlayerManager().getPlayerList().forEach(p->{
+            p.networkHandler.sendPacket(new StopSoundS2CPacket(null, null));
             p.heal(10000);
             p.clearStatusEffects();
             p.changeGameMode(GameMode.ADVENTURE);
@@ -156,6 +165,7 @@ public class MainGame {
             p.kill();
         });
         joinedPlayer = new HashMap<>();
+        misc.playSoundToAll(server, SSMSounds.GAMESET, SoundCategory.MASTER,2,1F);
     }
 
     public static void updateGame(MinecraftServer server){
@@ -252,5 +262,6 @@ public class MainGame {
         rules.get(GameRules.FALL_DAMAGE).set(false,server);
         rules.get(GameRules.SPECTATORS_GENERATE_CHUNKS).set(false,server);
         rules.get(GameRules.LOG_ADMIN_COMMANDS).set(false,server);
+        rules.get(GameRules.SHOW_DEATH_MESSAGES).set(false,server);
     }
 }

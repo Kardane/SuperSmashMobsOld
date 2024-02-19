@@ -27,7 +27,7 @@ public class MessageSender {
         });
     }
     public static void sendKillLog(PlayerEntity player, DamageSource source){
-        String sourceName = "null";
+        String sourceName = "unKnown";
         if(source.isOf(DamageTypes.ON_FIRE) || source.isOf(DamageTypes.IN_FIRE) || source.isOf(DamageTypes.LAVA) || source.isOf(DamageTypes.HOT_FLOOR)){
             sourceName = "화염";
         } else if(source.isOf(DamageTypes.OUT_OF_WORLD) || source.isOf(DamageTypes.GENERIC_KILL) || source.isOf(DamageTypes.GENERIC) || source.isOf(DamageTypes.OUTSIDE_BORDER)){
@@ -37,8 +37,8 @@ public class MessageSender {
         } else {
             sourceName = source.getName();
         }
-        int life = MainGame.joinedPlayer.get(player)-1;
-        if(!MainGame.isPlaying) life = 0;
+        int life = 0;
+        if(MainGame.isPlaying && MainGame.joinedPlayer.containsKey(player)) life = MainGame.joinedPlayer.get(player)-1;
         Text killlog = Text.empty()
                 .append(Text.literal("<"+player.getEntityName()+">").formatted(Formatting.RED).formatted(Formatting.BOLD))
                 .append(Text.literal(" ⏪☠⏪ ").formatted(Formatting.YELLOW))

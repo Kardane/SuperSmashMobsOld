@@ -1,0 +1,27 @@
+{
+  "death1": {"sounds": ["supersmashmob:death1"]},
+  "death2": {"sounds": ["supersmashmob:death2"]},
+  "finalsmash": {"sounds": ["supersmashmob:finalsmash"]},
+
+  "bgm.steve1": {"sounds": ["supersmashmob:bgm/steve1"]},
+  "bgm.steve2": {"sounds": ["supersmashmob:bgm/steve2"]},
+  "bgm.kingklul1": {"sounds": ["supersmashmob:bgm/kingklul"]},
+  "bgm.starfox1": {"sounds": ["supersmashmob:bgm/starfox"]},
+  "bgm.metaknight1": {"sounds": ["supersmashmob:bgm/metaknight"]},
+  "bgm.falcon1": {"sounds": ["supersmashmob:bgm/falcon"]},
+  "bgm.zelda1": {"sounds": ["supersmashmob:bgm/zelda1"]},
+  "bgm.zelda2": {"sounds": ["supersmashmob:bgm/zelda2"]},
+  "bgm.terry1": {"sounds": ["supersmashmob:bgm/terry"]},
+  "bgm.steve3": {"sounds": ["supersmashmob:bgm/steve3"]},
+
+  "game.1": {"sounds": ["supersmashmob:game/cd1"]},
+  "game.2": {"sounds": ["supersmashmob:game/cd2"]},
+  "game.3": {"sounds": ["supersmashmob:game/cd3"]},
+  "game.4": {"sounds": ["supersmashmob:game/cd4"]},
+  "game.5": {"sounds": ["supersmashmob:game/cd5"]},
+  "game.gameset": {"sounds": ["supersmashmob:game/gameset"]},
+  "game.go": {"sounds": ["gsupersmashmob:ame/go"]},
+  "game.ready": {"sounds": ["supersmashmob:game/ready"]},
+  "game.prepare": {"sounds": ["supersmashmob:game/prepare"]},
+  "game.charsel": {"sounds": ["supersmashmob:game/charsel"]}
+}

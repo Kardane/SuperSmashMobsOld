@@ -16,7 +16,7 @@ public class NoneKit extends AbstractKit {
     public static Integer HealthRegen = 1;
     public static Integer KnockbackMultiplier = 100;
     public static Float AttackSpeed = 20f;
-    public static Float AttackDamage = 1f;
+    public static Float AttackDamage = 10f;
     public static Float Speed = 0.1f;
     public NoneKit(){
         super(id, name, desc, icon,EntityType.ZOMBIE,Health,HealthRegen,KnockbackMultiplier,AttackSpeed,AttackDamage,Speed);

@@ -15,6 +15,7 @@ import net.minecraft.world.GameMode;
 import org.joml.Vector3f;
 import org.karn.supersmashmobs.api.HudApi;
 import org.karn.supersmashmobs.registry.SSMAttributes;
+import org.karn.supersmashmobs.registry.SSMSounds;
 import org.karn.supersmashmobs.util.GameMessages;
 import org.karn.supersmashmobs.util.MessageSender;
 import org.karn.supersmashmobs.util.misc;
@@ -37,7 +38,7 @@ public class PlayerTick {
             player.sendAbilitiesUpdate();
             player.setVelocity(player.getRotationVector().x/4,100/player.getAttributeValue(SSMAttributes.KNOCKBACK_TAKEN),player.getRotationVector().z/4);
             player.velocityModified = true;
-            player.playSound(SoundEvents.ENTITY_BAT_TAKEOFF, SoundCategory.MASTER,1,1.5F);
+            player.playSound(SoundEvents.ENTITY_BAT_TAKEOFF, SoundCategory.MASTER,0.5F,1.5F);
             player.getServerWorld().spawnParticles(new DustParticleEffect(new Vector3f(1,1,1),1),player.getX(),player.getY(),player.getZ(),30,0.5,0.5,0.5,0);
         }
         player.getHungerManager().setFoodLevel(20);
@@ -81,7 +82,8 @@ public class PlayerTick {
         player.setHealth(player.getMaxHealth());
         player.clearStatusEffects();
         player.changeGameMode(GameMode.SPECTATOR);
-        player.playSound(SoundEvents.ENTITY_GENERIC_EXPLODE, SoundCategory.MASTER,2,1.5F);
+        player.getServerWorld().playSound(null,player.getX(),player.getY(),player.getZ(), SoundEvents.ENTITY_GENERIC_EXPLODE, SoundCategory.MASTER,2,1.5F);
+        player.getServerWorld().playSound(null,player.getX(),player.getY(),player.getZ(), SSMSounds.DEATH2, SoundCategory.MASTER,2,1.5F);
         player.getServerWorld().spawnParticles(new DustParticleEffect(new Vector3f(1,1,0.33F),3),player.getX(),player.getY(),player.getZ(),200,0.1,5,0.1,0);
 
         player.teleport(0,70,0);
