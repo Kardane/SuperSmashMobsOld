@@ -83,6 +83,7 @@ public class SmashCrystal {
                 }
             };
             timer.schedule(task, 8*50);
+            tick(server);
         }
     }
 }

@@ -23,17 +23,22 @@ public class SSMSounds {
     public static final SoundEvent DEATH2 = register("death2", SoundEvents.ENTITY_WITHER_DEATH);
     public static final SoundEvent FINAL_SMASH = register("finalsmash", SoundEvents.BLOCK_END_PORTAL_SPAWN);
     // BGM
-    public static final SoundEvent BGM_FALCON_1 = register("bgm.falcon1", SoundEvents.ENTITY_PLAYER_ATTACK_SWEEP);
-    public static final SoundEvent BGM_STARFOX_1 = register("bgm.starfox1", SoundEvents.ENTITY_PLAYER_ATTACK_SWEEP);
-    public static final SoundEvent BGM_METAKNIGHT_1 = register("bgm.metaknight1", SoundEvents.ENTITY_PLAYER_ATTACK_SWEEP);
-    public static final SoundEvent BGM_TERRY_1 = register("bgm.terry1", SoundEvents.ENTITY_PLAYER_ATTACK_SWEEP);
-    public static final SoundEvent BMG_KINGKLUL_1 = register("bgm.kingklul1", SoundEvents.ENTITY_PLAYER_ATTACK_SWEEP);
-    public static final SoundEvent BGM_ZELDA_1 = register("bgm.zelda1", SoundEvents.ENTITY_PLAYER_ATTACK_SWEEP);
-    public static final SoundEvent BGM_ZELDA_2 = register("bgm.zelda2", SoundEvents.ENTITY_PLAYER_ATTACK_SWEEP);
-    public static final SoundEvent BGM_STEVE_1 = register("bgm.steve1", SoundEvents.ENTITY_PLAYER_ATTACK_SWEEP);
-    public static final SoundEvent BGM_STEVE_2 = register("bgm.steve2", SoundEvents.ENTITY_PLAYER_ATTACK_SWEEP);
-    public static final SoundEvent BGM_STEVE_3 = register("bgm.steve3", SoundEvents.ENTITY_PLAYER_ATTACK_SWEEP);
+    public static final SoundEvent BGM_FALCON_1 = registerBGM("bgm.falcon1", SoundEvents.BLOCK_AZALEA_BREAK);
+    public static final SoundEvent BGM_STARFOX_1 = registerBGM("bgm.starfox1", SoundEvents.BLOCK_AZALEA_BREAK);
+    public static final SoundEvent BGM_METAKNIGHT_1 = registerBGM("bgm.metaknight1", SoundEvents.BLOCK_AZALEA_BREAK);
+    public static final SoundEvent BGM_TERRY_1 = registerBGM("bgm.terry1", SoundEvents.BLOCK_AZALEA_BREAK);
+    public static final SoundEvent BMG_KINGKLUL_1 = registerBGM("bgm.kingklul1", SoundEvents.BLOCK_AZALEA_BREAK);
+    public static final SoundEvent BGM_ZELDA_1 = registerBGM("bgm.zelda1", SoundEvents.BLOCK_AZALEA_BREAK);
+    public static final SoundEvent BGM_ZELDA_2 = registerBGM("bgm.zelda2", SoundEvents.BLOCK_AZALEA_BREAK);
+    public static final SoundEvent BGM_STEVE_1 = registerBGM("bgm.steve1", SoundEvents.BLOCK_AZALEA_BREAK);
+    public static final SoundEvent BGM_STEVE_2 = registerBGM("bgm.steve2", SoundEvents.BLOCK_AZALEA_BREAK);
+    public static final SoundEvent BGM_STEVE_3 = registerBGM("bgm.steve3", SoundEvents.BLOCK_AZALEA_BREAK);
     private static SoundEvent register(String name, SoundEvent soundEvent) {
+        Identifier identifier = new Identifier(MODID, name);
+        return Registry.register(Registries.SOUND_EVENT, identifier, PolymerSoundEvent.of(identifier, soundEvent));
+    }
+
+    private static SoundEvent registerBGM(String name, SoundEvent soundEvent) {
         Identifier identifier = new Identifier(MODID, name);
         return Registry.register(Registries.SOUND_EVENT, identifier, PolymerSoundEvent.of(identifier, soundEvent));
     }

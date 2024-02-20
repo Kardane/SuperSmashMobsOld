@@ -20,7 +20,7 @@
   "game.4": {"sounds": ["supersmashmob:game/cd4"]},
   "game.5": {"sounds": ["supersmashmob:game/cd5"]},
   "game.gameset": {"sounds": ["supersmashmob:game/gameset"]},
-  "game.go": {"sounds": ["gsupersmashmob:ame/go"]},
+  "game.go": {"sounds": ["supersmashmob:game/go"]},
   "game.ready": {"sounds": ["supersmashmob:game/ready"]},
   "game.prepare": {"sounds": ["supersmashmob:game/prepare"]},
   "game.charsel": {"sounds": ["supersmashmob:game/charsel"]}

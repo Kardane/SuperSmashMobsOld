@@ -49,6 +49,16 @@ public class GameCommand {
                             return 1;
                         })
                 )
+                .then(CommandManager.literal("bots")
+                        .then(CommandManager.argument("count", IntegerArgumentType.integer(1))
+                                .executes(ctx->{
+                                    for (int i = 0; i < IntegerArgumentType.getInteger(ctx, "count"); i++) {
+                                        ctx.getSource().getServer().getCommandManager().executeWithPrefix(ctx.getSource().withSilent(), "player bot-" +i+" spawn");
+                                    }
+                                    return 1;
+                                })
+                        )
+                )
         );
     }
 }

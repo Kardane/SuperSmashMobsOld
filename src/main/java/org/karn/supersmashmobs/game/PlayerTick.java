@@ -20,10 +20,7 @@ import org.karn.supersmashmobs.util.GameMessages;
 import org.karn.supersmashmobs.util.MessageSender;
 import org.karn.supersmashmobs.util.misc;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Timer;
-import java.util.TimerTask;
+import java.util.*;
 
 public class PlayerTick {
     public static void mainTick(ServerPlayerEntity player){
@@ -76,6 +73,8 @@ public class PlayerTick {
 
     public static void onPlayerDeath(ServerPlayerEntity player, DamageSource source){
         MessageSender.sendKillLog(player,source);
+
+        if(!MainGame.isPlaying) return;
         int life = MainGame.joinedPlayer.get(player);
         MainGame.joinedPlayer.replace(player,life-1);
 
@@ -92,12 +91,12 @@ public class PlayerTick {
             Timer timer = new Timer();
             TimerTask task = new TimerTask() {
                 public void run() {
+                    MessageSender.clearTitle(player);
+                    player.server.getCommandManager().executeWithPrefix(player.server.getCommandSource().withSilent().withEntity(player), "spreadplayers 0 0 16 80 false @s");
+
                     player.changeGameMode(GameMode.ADVENTURE);
                     player.sendAbilitiesUpdate();
-                    MessageSender.clearTitle(player);
-                    Map<PlayerEntity,Integer> map = new HashMap<>();
-                    map.put(player,0);
-                    misc.spreadPlayers(player.server, map, MainGame.ringPos, 16, 150, 200);
+                    //misc.spreadPlayers(player.getServerWorld(), temp, MainGame.ringPos, 16, 150, 200);
                 }
             };
             timer.schedule(task, 60 * 50);

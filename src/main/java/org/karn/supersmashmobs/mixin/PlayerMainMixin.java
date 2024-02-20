@@ -70,31 +70,34 @@ public class PlayerMainMixin implements HudApi {
 
     @Inject(method = "damage", at = @At("HEAD"), cancellable = true)
     private void addHurtValue(DamageSource source, float amount, CallbackInfoReturnable<Boolean> cir) {
-        if(source.isOf(DamageTypes.FIREWORKS)) cir.setReturnValue(false);;
-        if(!misc.isVoidDamage(source) && !player.getWorld().isClient) {
-            float finalAmount = (float) (amount * player.getAttributeValue(SSMAttributes.PROTECTION)/100);
-            player.hurtTime = 0;
-
-            HurtValue = (int) finalAmount;
-            decreaseHurtValue = HurtValue/4+1;
-            if (finalAmount / player.getMaxHealth() > BIGDEALPERCENT) {
-                decreaseHurtValue = HurtValue/8;
-                slowHurtAnimation = true;
-                Timer timer = new Timer();
-                TimerTask task = new TimerTask() {
-                    public void run() {
-                        slowHurtAnimation = false;
-                    }
-                };
-                timer.schedule(task, BIGDEALWAITTICK * 50);
-            }
-
-            if(finalAmount >= player.getHealth()){
-                PlayerTick.onPlayerDeath(player,source);
-            } else {
-                player.damage(player.getDamageSources().generic(),finalAmount);
-            }
+        if(source.isOf(DamageTypes.FIREWORKS)) {
             cir.setReturnValue(false);
+        } else {
+            if(!misc.isVoidDamage(source) && !player.getWorld().isClient) {
+                float finalAmount = (float) (amount * player.getAttributeValue(SSMAttributes.PROTECTION)/100);
+                player.hurtTime = 0;
+
+                HurtValue = (int) finalAmount;
+                decreaseHurtValue = HurtValue/4+1;
+                if (finalAmount / player.getMaxHealth() > BIGDEALPERCENT) {
+                    decreaseHurtValue = HurtValue/8;
+                    slowHurtAnimation = true;
+                    Timer timer = new Timer();
+                    TimerTask task = new TimerTask() {
+                        public void run() {
+                            slowHurtAnimation = false;
+                        }
+                    };
+                    timer.schedule(task, BIGDEALWAITTICK * 50);
+                }
+
+                if(finalAmount >= player.getHealth()){
+                    PlayerTick.onPlayerDeath(player,source);
+                } else {
+                    player.damage(player.getDamageSources().generic(),finalAmount);
+                }
+                cir.setReturnValue(false);
+            }
         }
     }
 

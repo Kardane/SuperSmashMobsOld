@@ -4,6 +4,8 @@ import net.minecraft.entity.attribute.EntityAttribute;
 import net.minecraft.entity.attribute.EntityAttributes;
 import net.minecraft.entity.boss.BossBar;
 import net.minecraft.entity.boss.CommandBossBar;
+import net.minecraft.entity.effect.StatusEffectInstance;
+import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.network.packet.s2c.play.StopSoundS2CPacket;
 import net.minecraft.server.MinecraftServer;
@@ -43,6 +45,27 @@ public class MainGame {
     public static UUID gameUUID = null;
 
     public static void prepareGame(MinecraftServer server){
+        isPlaying = true;
+        gameUUID = UUID.randomUUID();
+        System.out.println(System.currentTimeMillis());
+        Map<PlayerEntity, Vec3d> map = misc.spreadPlayers(server.getOverworld(), server.getPlayerManager().getPlayerList(),ringPos,16,80,60);
+        System.out.println(System.currentTimeMillis());
+        for (var a:map.entrySet()) {
+            //a.getKey().teleport(server.getOverworld(), a.getValue().x,a.getValue().y,a.getValue().z,Set.of(),a.getKey().getYaw(),a.getKey().getPitch());
+        }
+        server.getCommandManager().executeWithPrefix(server.getCommandSource().withSilent(), "spreadplayers 0 0 16 80 false @a");
+        System.out.println(System.currentTimeMillis());
+        server.getPlayerManager().getPlayerList().forEach(p->{
+            HudApi a = (HudApi) p;
+            a.setSkillCoolA(140);
+            a.setSkillCoolB(140);
+            a.setSkillCoolC(140);
+            a.setSkillCoolD(140);
+            p.addStatusEffect(new StatusEffectInstance(StatusEffects.SLOWNESS, 140, 100));
+            p.addStatusEffect(new StatusEffectInstance(StatusEffects.RESISTANCE, 140, 100));
+            p.addStatusEffect(new StatusEffectInstance(StatusEffects.JUMP_BOOST, 140, 200));
+        });
+
         Timer count5 = new Timer();
         TimerTask task5 = new TimerTask() {
             public void run() {
@@ -94,7 +117,7 @@ public class MainGame {
         TimerTask task = new TimerTask() {
             public void run() {
                 startGame(server);
-                BGMManager.playBGM(server,BGMManager.shuffleMap(BGMManager.makeBGMList()), gameUUID);
+                BGMManager.playBGM(server,BGMManager.shuffleMap(), gameUUID);
                 misc.playSoundToAll(server, SSMSounds.COUNTDOWN_GO, SoundCategory.MASTER,2,1F);
             }
         };
@@ -102,13 +125,14 @@ public class MainGame {
     }
 
     public static void startGame(MinecraftServer server){
-        gameUUID = UUID.randomUUID();
+
         WorldBorder border = server.getOverworld().getWorldBorder();
         border.setCenter(ringPos.x,ringPos.y);
         border.setDamagePerBlock(0);
         border.setSafeZone(0);
         border.setWarningBlocks(5);
-        border.setMaxRadius(1000);
+        border.setMaxRadius(300);
+
         CommandBossBar bar = server.getBossBarManager().add(new Identifier(MODID,"crystal"),Text.literal("스매시 크리스탈 재생성"));
         bar.setColor(BossBar.Color.PINK);
         bar.setValue(0);
@@ -116,9 +140,6 @@ public class MainGame {
         bar.addPlayers(server.getPlayerManager().getPlayerList());
         setGamerule(server);
         setPlayerLife(server);
-        System.out.println(System.currentTimeMillis());
-        misc.spreadPlayers(server,joinedPlayer,ringPos,16,80,60);
-        System.out.println(System.currentTimeMillis());
         server.getPlayerManager().getPlayerList().forEach(p->{
             p.changeGameMode(GameMode.ADVENTURE);
             HudApi a = (HudApi) p;
@@ -263,5 +284,6 @@ public class MainGame {
         rules.get(GameRules.SPECTATORS_GENERATE_CHUNKS).set(false,server);
         rules.get(GameRules.LOG_ADMIN_COMMANDS).set(false,server);
         rules.get(GameRules.SHOW_DEATH_MESSAGES).set(false,server);
+        rules.get(GameRules.MAX_ENTITY_CRAMMING).set(100,server);
     }
 }

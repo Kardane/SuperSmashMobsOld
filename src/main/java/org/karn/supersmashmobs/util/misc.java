@@ -1,22 +1,17 @@
 package org.karn.supersmashmobs.util;
 
-import com.google.common.collect.Maps;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.damage.DamageTypes;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.registry.tag.BlockTags;
-import net.minecraft.scoreboard.AbstractTeam;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvent;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Direction;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.Vec2f;
+import net.minecraft.util.math.*;
 import net.minecraft.util.math.random.Random;
 import net.minecraft.world.BlockView;
 import org.karn.supersmashmobs.effect.AbstractSSMEffect;
@@ -57,28 +52,28 @@ public class misc {
     }
 
     // This method is used to spread players in a circle
-    public static void spreadPlayers(MinecraftServer server, Map<PlayerEntity, Integer> players, Vec2f center, float spreadDistance, float maxRange, int maxY) {
+    public static Map<PlayerEntity, Vec3d> spreadPlayers(ServerWorld world, List<ServerPlayerEntity> players, Vec2f center, float spreadDistance, float maxRange, int maxY) {
         Random random = Random.create();
         double d = (double)(center.x - maxRange);
         double e = (double)(center.y - maxRange);
         double f = (double)(center.x + maxRange);
         double g = (double)(center.y + maxRange);
         Pile[] piles = makePiles(random, players.size(), d, e, f, g);
-        spread(center, (double)spreadDistance, server.getOverworld(), random, d, e, f, g, maxY, piles);
-        getMinDistance(players.keySet().stream().toList(), server.getOverworld(), piles, maxY);
+        spread(center, (double)spreadDistance, world, random, d, e, f, g, maxY, piles);
+        return getMinDistance(players, world, piles, maxY);
     }
 
-    private static void getMinDistance(List<PlayerEntity> players, ServerWorld world, Pile[] piles, int maxY) {
+    private static Map<PlayerEntity, Vec3d> getMinDistance(List<ServerPlayerEntity> players, ServerWorld world, Pile[] piles, int maxY) {
         double d = 0.0;
         int i = 0;
-
+        Map<PlayerEntity, Vec3d> map = new HashMap<>();
         double e;
         for (PlayerEntity player: players) {
             Entity entity = (Entity) player;
             Pile pile;
             pile = piles[i++];
-
-            entity.teleport(world, (double)MathHelper.floor(pile.x) + 0.5, (double)pile.getY(world, maxY), (double)MathHelper.floor(pile.z) + 0.5, Set.of(), entity.getYaw(), entity.getPitch());
+            map.put(player, new Vec3d((double)MathHelper.floor(pile.x) + 0.5, (double)pile.getY(world, maxY), (double)MathHelper.floor(pile.z) + 0.5));
+            //entity.teleport(world, (double)MathHelper.floor(pile.x) + 0.5, (double)pile.getY(world, maxY), (double)MathHelper.floor(pile.z) + 0.5, Set.of(), entity.getYaw(), entity.getPitch());
             e = Double.MAX_VALUE;
             Pile[] var14 = piles;
             int var15 = piles.length;
@@ -91,6 +86,7 @@ public class misc {
                 }
             }
         }
+        return map;
     }
 
     private static void spread(Vec2f center, double spreadDistance, ServerWorld world, Random random, double minX, double minZ, double maxX, double maxZ, int maxY, Pile[] piles) {
