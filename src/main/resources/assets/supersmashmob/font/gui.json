@@ -5,13 +5,13 @@
 
 		{"type": "bitmap","file": "supersmashmob:font/icon/base.png","ascent": -22,"height": 84,"chars": ["\u4100"]},
 		{"type": "bitmap","file": "supersmashmob:font/icon/life.png","ascent": -45,"height": 16,"chars": ["\u4101"]},
-		{"type": "bitmap","file": "supersmashmob:font/icon/attack_damage.png","ascent": -24,"height": 12,"chars": ["\u4102"]},
-		{"type": "bitmap","file": "supersmashmob:font/icon/attack_speed.png","ascent": -24,"height": 12,"chars": ["\u4103"]},
+		{"type": "bitmap","file": "supersmashmob:font/icon/attack_damage.png","ascent": -26,"height": 12,"chars": ["\u4102"]},
+		{"type": "bitmap","file": "supersmashmob:font/icon/attack_speed.png","ascent": -26,"height": 12,"chars": ["\u4103"]},
 		{"type": "bitmap","file": "supersmashmob:font/icon/protection.png","ascent": -38,"height": 12,"chars": ["\u4104"]},
 		{"type": "bitmap","file": "supersmashmob:font/icon/knockback.png","ascent": -38,"height": 12,"chars": ["\u4105"]},
-		{"type": "bitmap","file": "supersmashmob:font/icon/speed.png","ascent": -52,"height": 12,"chars": ["\u4106"]},
-		{"type": "bitmap","file": "supersmashmob:font/icon/regen.png","ascent": -52,"height": 12,"chars": ["\u4107"]},
-		{"type": "bitmap","file": "supersmashmob:font/icon/ult.png","ascent": 2,"height": 16,"chars": ["\u4108"]},
+		{"type": "bitmap","file": "supersmashmob:font/icon/speed.png","ascent": -50,"height": 12,"chars": ["\u4106"]},
+		{"type": "bitmap","file": "supersmashmob:font/icon/regen.png","ascent": -50,"height": 12,"chars": ["\u4107"]},
+		{"type": "bitmap","file": "supersmashmob:font/icon/ult.png","ascent": 3,"height": 16,"chars": ["\u4108"]},
 
 		{"type": "bitmap","file": "supersmashmob:font/icon/kit/none.png","ascent": -22,"height": 43,"chars": ["\u5000"]}
 

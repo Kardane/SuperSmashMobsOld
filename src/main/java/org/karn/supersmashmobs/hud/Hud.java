@@ -113,8 +113,7 @@ public class Hud {
         int f = String.valueOf(knockback).length();
         int g = String.valueOf(protection - 100).length();
         MutableText base = Text.empty()
-                .append(Text.translatable("space.-39"))
-                .append(Text.literal("\u4101").setStyle(guiStyle));
+                .append(Text.translatable("space.-23"));
 
         //life
         if(MainGame.joinedPlayer.get(player) == null) {
@@ -176,17 +175,17 @@ public class Hud {
                 .append(Text.translatable("space.1"));
 
         if(player.getMainHandStack().isOf(Items.NETHER_STAR)){
-            base.append(Text.translatable("space.1"))
+            base.append(Text.translatable("space.4"))
                     .append(Text.literal("\u4108").setStyle(guiStyle))
                     .append(Text.literal("사용가능").setStyle(guiSkillStyle).formatted(Formatting.GREEN));
         } else {
-            base.append(Text.translatable("space.1"))
+            base.append(Text.translatable("space.4"))
                     .append(Text.literal("\u4108").setStyle(guiStyle))
                     .append(Text.literal("사용불가").setStyle(guiSkillStyle).formatted(Formatting.RED));
         }
         base.append(Text.translatable("space.-64"));
 
-        return base.append(Text.translatable("space.-"+(1 + (String.valueOf(a.getSkillCoolA()/20).length()-1)*8 + (String.valueOf(a.getSkillCoolB()/20).length()-1)*8 + (String.valueOf(a.getSkillCoolC()/20).length()-1)*8) ));
+        return base.append(Text.translatable("space.-"+(4 + (String.valueOf(a.getSkillCoolA()/20).length()-1)*8 + (String.valueOf(a.getSkillCoolB()/20).length()-1)*8 + (String.valueOf(a.getSkillCoolC()/20).length()-1)*8) ));
     }
 
     private static MutableText getCooldownDisplay(int cooldown){
@@ -199,9 +198,9 @@ public class Hud {
                     .append(Text.translatable("space.-5"))
                     .append(Text.literal("]").setStyle(guiSkillStyle).formatted(Formatting.RED));
         }else {
-            return base.append(Text.literal("[0").setStyle(guiSkillStyle))
+            return base.append(Text.literal("[0").setStyle(guiSkillStyle).formatted(Formatting.GOLD))
                     .append(Text.translatable("space.-5"))
-                    .append(Text.literal("]").setStyle(guiSkillStyle));
+                    .append(Text.literal("]").setStyle(guiSkillStyle).formatted(Formatting.GOLD));
         }
     }
 }
