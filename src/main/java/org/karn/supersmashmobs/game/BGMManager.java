@@ -5,19 +5,16 @@ import net.minecraft.advancement.AdvancementFrame;
 import net.minecraft.advancement.AdvancementProgress;
 import net.minecraft.advancement.AdvancementRequirements;
 import net.minecraft.advancement.criterion.Criteria;
-import net.minecraft.advancement.criterion.Criterion;
 import net.minecraft.advancement.criterion.ImpossibleCriterion;
 import net.minecraft.item.Items;
 import net.minecraft.network.packet.s2c.play.AdvancementUpdateS2CPacket;
-import net.minecraft.network.packet.s2c.play.ScreenHandlerPropertyUpdateS2CPacket;
-import net.minecraft.network.packet.s2c.play.ScreenHandlerSlotUpdateS2CPacket;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import org.karn.supersmashmobs.registry.SSMSounds;
-import org.karn.supersmashmobs.util.misc;
+import org.karn.supersmashmobs.util.Misc;
 
 import java.util.*;
 
@@ -59,7 +56,7 @@ public class BGMManager {
     public static void playBGM(MinecraftServer server, Map<SoundEvent,BGMInfo> bgmList, UUID uuid) {
         if (!MainGame.isPlaying || uuid != MainGame.gameUUID) return;
         System.out.println(bgmList.keySet().iterator().next().getId());
-        misc.playSoundToAll(server, bgmList.keySet().iterator().next(), SoundCategory.VOICE, 1,1);
+        Misc.playSoundToAll(server, bgmList.keySet().iterator().next(), SoundCategory.VOICE, 1,1);
         testToast(server, Text.of("\uD83C\uDF9C "+bgmList.values().iterator().next().name), Text.of("desc"));
         int duration = bgmList.values().iterator().next().duration;
         if(bgmList.size() > 1){

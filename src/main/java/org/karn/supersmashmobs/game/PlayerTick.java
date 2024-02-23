@@ -1,16 +1,11 @@
 package org.karn.supersmashmobs.game;
 
 import net.minecraft.entity.damage.DamageSource;
-import net.minecraft.entity.damage.DamageTypes;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.network.packet.s2c.play.UpdateSelectedSlotS2CPacket;
 import net.minecraft.particle.DustParticleEffect;
-import net.minecraft.particle.ParticleTypes;
-import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
-import net.minecraft.util.math.Vec2f;
 import net.minecraft.world.GameMode;
 import org.joml.Vector3f;
 import org.karn.supersmashmobs.api.HudApi;
@@ -18,7 +13,7 @@ import org.karn.supersmashmobs.registry.SSMAttributes;
 import org.karn.supersmashmobs.registry.SSMSounds;
 import org.karn.supersmashmobs.util.GameMessages;
 import org.karn.supersmashmobs.util.MessageSender;
-import org.karn.supersmashmobs.util.misc;
+import org.karn.supersmashmobs.util.Misc;
 
 import java.util.*;
 
@@ -26,7 +21,7 @@ public class PlayerTick {
     public static void mainTick(ServerPlayerEntity player){
         if(player.isSpectator()) return;
 
-        if(player.isOnGround() && !player.getAbilities().allowFlying && !misc.hasBindEffect(player)){
+        if(player.isOnGround() && !player.getAbilities().allowFlying && !Misc.hasBindEffect(player)){
             player.getAbilities().allowFlying = true;
             player.sendAbilitiesUpdate();
         } else if(player.getAbilities().flying){
@@ -59,7 +54,7 @@ public class PlayerTick {
                     if(a.getSkillCoolC() <= 0) SkillRouter.routeSkillC(player);
                     break;
                 case 3:
-                    if(a.getSkillCoolD() <= 0) SkillRouter.routeSkillD(player);
+                    if(a.canFinalSmash()) SkillRouter.routeSmash(player);
                     break;
             }
             player.getInventory().selectedSlot = 4;

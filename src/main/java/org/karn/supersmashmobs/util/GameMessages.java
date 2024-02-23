@@ -35,6 +35,11 @@ public class GameMessages {
                 .append(Text.literal("스매시 크리스탈이 [" + (int) pos.x + ","+ (int) pos.y + "] 에 소환됩니다!").formatted(Formatting.LIGHT_PURPLE).formatted(Formatting.BOLD));
     }
 
+    public static Text getCrystalUseMsg(PlayerEntity player){
+        return Text.empty().append(Text.literal("[SSM] ").formatted(Formatting.YELLOW).formatted(Formatting.BOLD))
+                .append(Text.literal(player.getEntityName()+"이(가) 스매시 크리스탈을 사용합니다!").formatted(Formatting.LIGHT_PURPLE).formatted(Formatting.BOLD));
+    }
+
     public static Text getWinnerMsg(PlayerEntity player){
         return Text.empty().append(Text.literal("\uD83D\uDC51 ").append(player.getName()).append(" \uD83D\uDC51").formatted(Formatting.YELLOW).formatted(Formatting.BOLD));
     }

@@ -19,7 +19,6 @@ dependencies {
     modImplementation "eu.pb4:polymer-core:${project.polymer_version}"
     modImplementation "eu.pb4:polymer-resource-pack:${project.polymer_version}"
     modImplementation "eu.pb4:polymer-networking:${project.polymer_version}"
-    //modImplementation "maven.modrinth:karnslib:0.2"
 
         // Fabric API. This is technically optional, but you probably want it anyway.
     modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"

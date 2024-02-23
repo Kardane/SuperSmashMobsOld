@@ -16,4 +16,10 @@ public abstract class AbstractSkill {
         cooldown = cooldown;
         type = type;
     }
+
+    public abstract String getId();
+    public abstract String getName();
+    public abstract String getDesc();
+    public abstract SkillType getSkillType();
+    public abstract Integer getCooldown();
 }

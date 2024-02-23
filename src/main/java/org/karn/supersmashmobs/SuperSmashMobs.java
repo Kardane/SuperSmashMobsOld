@@ -16,6 +16,7 @@ import org.karn.supersmashmobs.registry.SSMAttributes;
 import org.karn.supersmashmobs.command.GameCommand;
 import org.karn.supersmashmobs.command.HudCommand;
 import org.karn.supersmashmobs.registry.SSMEffects;
+import org.karn.supersmashmobs.registry.SSMItems;
 import org.karn.supersmashmobs.registry.SSMSounds;
 
 public class SuperSmashMobs implements ModInitializer {
@@ -27,7 +28,7 @@ public class SuperSmashMobs implements ModInitializer {
         SSMAttributes.init();
         SSMEffects.init();
         SSMSounds.init();
-        KitRegistry.init();
+        SSMItems.init();
         System.out.println("SSB online!");
         CommandRegistrationCallback.EVENT.register((dispatcher, commandRegistryAccess, ignored1) -> {
             HudCommand.register(dispatcher);

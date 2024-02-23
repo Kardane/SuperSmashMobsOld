@@ -1,17 +1,18 @@
 package org.karn.supersmashmobs.mixin;
 
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.ItemEntity;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.damage.DamageTypes;
+import net.minecraft.item.ItemStack;
 import net.minecraft.server.network.ServerPlayerEntity;
 import org.karn.supersmashmobs.api.HudApi;
 import org.karn.supersmashmobs.game.kit.AbstractKit;
 import org.karn.supersmashmobs.game.kit.none.NoneKit;
 import org.karn.supersmashmobs.registry.SSMAttributes;
-import org.karn.supersmashmobs.game.MainGame;
 import org.karn.supersmashmobs.game.PlayerTick;
 import org.karn.supersmashmobs.hud.Hud;
-import org.karn.supersmashmobs.util.misc;
+import org.karn.supersmashmobs.util.Misc;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -28,6 +29,9 @@ import static org.karn.supersmashmobs.hud.Hud.BIGDEALWAITTICK;
 public class PlayerMainMixin implements HudApi {
     private final ServerPlayerEntity player = (ServerPlayerEntity) (Object) this;
     public AbstractKit kit = new NoneKit();
+    public boolean canFinalSmash = false;
+    @Override public boolean canFinalSmash() {return this.canFinalSmash;}
+    @Override public void setFinalSmash(boolean value) {this.canFinalSmash = value;}
     @Override public AbstractKit getKit() {return this.kit;}
     @Override public void setKit(AbstractKit kit) {this.kit = kit;}
     private int decreaseHurtValue = 0;
@@ -36,21 +40,18 @@ public class PlayerMainMixin implements HudApi {
     public int SkillCoolA = -1;
     public int SkillCoolB = -1;
     public int SkillCoolC = -1;
-    public int SkillCoolD = -1;
     public boolean slowHurtAnimation = false;
     @Override public int getHurtValue() {return this.HurtValue;}
     @Override public int getSkillCoolA() {return this.SkillCoolA;}
     @Override public int getSkillCoolB() {return this.SkillCoolB;}
     @Override public int getSkillCoolC() {return this.SkillCoolC;}
-    @Override public int getSkillCoolD() {return this.SkillCoolD;}
     @Override public void setHurtValue(int value) {this.HurtValue = value;}
     @Override public void setSkillCoolA(int value) {this.SkillCoolA = value;}
     @Override public void setSkillCoolB(int value) {this.SkillCoolB = value;}
     @Override public void setSkillCoolC(int value) {this.SkillCoolC = value;}
-    @Override public void setSkillCoolD(int value) {this.SkillCoolD = value;}
 
     @Inject(method = "tick", at = @At("TAIL"))
-    private void showUI(CallbackInfo ci) {
+    private void SSM$showUI(CallbackInfo ci) {
         if(!player.getWorld().isClient && !player.isCreative() && !player.isSpectator()){
             if(player.server.getTicks()%2==0){
                 player.sendMessage(Hud.getHud(player),true);
@@ -64,16 +65,15 @@ public class PlayerMainMixin implements HudApi {
             if(SkillCoolA>=0)SkillCoolA--;
             if(SkillCoolB>=0)SkillCoolB--;
             if(SkillCoolC>=0)SkillCoolC--;
-            if(SkillCoolD>=0)SkillCoolD--;
         }
     }
 
     @Inject(method = "damage", at = @At("HEAD"), cancellable = true)
-    private void addHurtValue(DamageSource source, float amount, CallbackInfoReturnable<Boolean> cir) {
+    private void SSM$addHurtValue(DamageSource source, float amount, CallbackInfoReturnable<Boolean> cir) {
         if(source.isOf(DamageTypes.FIREWORKS)) {
             cir.setReturnValue(false);
         } else {
-            if(!misc.isVoidDamage(source) && !player.getWorld().isClient) {
+            if(!Misc.isVoidDamage(source) && !player.getWorld().isClient) {
                 float finalAmount = (float) (amount * player.getAttributeValue(SSMAttributes.PROTECTION)/100);
                 player.hurtTime = 0;
 
@@ -102,7 +102,7 @@ public class PlayerMainMixin implements HudApi {
     }
 
     @Inject(method = "attack", at = @At("HEAD"), cancellable = true)
-    private void tryAttack(Entity target, CallbackInfo ci){
+    private void SSM$tryAttack(Entity target, CallbackInfo ci){
         if(!player.getWorld().isClient && !player.isSpectator()){
             if(AttackCooldown <= 0){
                 target.damage(player.getDamageSources().playerAttack(player), (float) player.getAttributeValue(SSMAttributes.ATTACK_DMG));
@@ -110,5 +110,9 @@ public class PlayerMainMixin implements HudApi {
             }
             ci.cancel();
         }
+    }
+    @Inject(method = "dropItem", at = @At("HEAD"), cancellable = true)
+    private void SSM$dropItem(ItemStack stack, boolean throwRandomly, boolean retainOwnership, CallbackInfoReturnable<ItemEntity> cir){
+        cir.setReturnValue(null);
     }
 }

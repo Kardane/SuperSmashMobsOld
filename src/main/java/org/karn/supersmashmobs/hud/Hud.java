@@ -46,6 +46,7 @@ public class Hud {
     public static int BIGDEALWAITTICK = 6;
     public static Text getHud(ServerPlayerEntity player){
         HudApi a = (HudApi) player;
+        if(a.getKit() == null) return Text.literal("현재 킷이 없습니다!").formatted(Formatting.RED);
         return Text.translatable("space.-103")//전체 오프셋 조절
                 .append(buildHealthBar(player,a.getHurtValue()))
                 .append(hotbarUp)
@@ -174,7 +175,7 @@ public class Hud {
                 .append(getCooldownDisplay(a.getSkillCoolC()))
                 .append(Text.translatable("space.1"));
 
-        if(player.getMainHandStack().isOf(Items.NETHER_STAR)){
+        if(a.canFinalSmash()){
             base.append(Text.translatable("space.4"))
                     .append(Text.literal("\u4108").setStyle(guiStyle))
                     .append(Text.literal("사용가능").setStyle(guiSkillStyle).formatted(Formatting.GREEN));

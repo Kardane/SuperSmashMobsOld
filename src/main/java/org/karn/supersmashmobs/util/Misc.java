@@ -20,7 +20,31 @@ import org.karn.supersmashmobs.effect.SSMEffectType;
 import java.util.*;
 
 
-public class misc {
+public class Misc {
+
+    public static Vec3d getUnitVector(Vec3d vec1, Vec3d vec2){
+        Vec3d a = new Vec3d(vec2.x-vec1.x,vec2.y-vec1.y,vec2.z-vec1.z);
+        double m = MathHelper.sqrt((float) (a.x*a.x + a.y*a.y + a.z*a.z));
+        return new Vec3d(-a.x/m,-a.y/m,-a.z/m);
+    }
+    public static Vec3d getLocalPos(Vec3d pos, Vec2f rot, double forward, double up, double right){
+        return getLocalPos(pos,rot,new Vec3d(forward,up,right));
+    }
+    public static Vec3d getLocalPos(Vec3d pos, Vec2f rot, Vec3d movement) {
+        float var4 = MathHelper.cos((rot.y + 90.0F) * (float) (Math.PI / 180.0));
+        float var5 = MathHelper.sin((rot.y + 90.0F) * (float) (Math.PI / 180.0));
+        float var6 = MathHelper.cos(-rot.x * (float) (Math.PI / 180.0));
+        float var7 = MathHelper.sin(-rot.x * (float) (Math.PI / 180.0));
+        float var8 = MathHelper.cos((-rot.x + 90.0F) * (float) (Math.PI / 180.0));
+        float var9 = MathHelper.sin((-rot.x + 90.0F) * (float) (Math.PI / 180.0));
+        Vec3d var10 = new Vec3d((double) (var4 * var6), (double) var7, (double) (var5 * var6));
+        Vec3d var11 = new Vec3d((double) (var4 * var8), (double) var9, (double) (var5 * var8));
+        Vec3d var12 = var10.crossProduct(var11).multiply(-1.0);
+        double var13 = var10.x * movement.z + var11.x * movement.y + var12.x * movement.x;
+        double var15 = var10.y * movement.z + var11.y * movement.y + var12.y * movement.x;
+        double var17 = var10.z * movement.z + var11.z * movement.y + var12.z * movement.x;
+        return new Vec3d(pos.x + var13, pos.y + var15, pos.z + var17);
+    }
     public static boolean isVoidDamage(DamageSource source){
         return source.isOf(DamageTypes.GENERIC_KILL) || source.isOf(DamageTypes.GENERIC) || source.isOf(DamageTypes.OUT_OF_WORLD)|| source.isOf(DamageTypes.FALL);
     }

@@ -1,0 +1,8 @@
+{"parent": "minecraft:item/generated","textures":{"layer0":"supersmashmob:item/none/a"},
+  "display": {
+    "thirdperson_righthand": {"scale": [0, 0, 0]},
+    "thirdperson_lefthand": {"scale": [0, 0, 0]},
+    "firstperson_righthand": {"scale": [0, 0, 0]},
+    "firstperson_lefthand": {"scale": [0, 0, 0]}
+  }
+}

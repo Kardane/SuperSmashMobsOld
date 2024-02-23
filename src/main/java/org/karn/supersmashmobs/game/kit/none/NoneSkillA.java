@@ -2,7 +2,6 @@ package org.karn.supersmashmobs.game.kit.none;
 
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
-import net.minecraft.text.TextColor;
 import net.minecraft.util.Formatting;
 import org.karn.supersmashmobs.api.HudApi;
 import org.karn.supersmashmobs.game.kit.AbstractSkill;
@@ -24,4 +23,10 @@ public class NoneSkillA extends AbstractSkill {
         player.sendMessage(Text.literal(desc));
         ((HudApi) player).setSkillCoolA(cooldown);
     }
+
+    @Override public String getId() {return id;}
+    @Override public String getName() {return name;}
+    @Override public String getDesc() {return desc;}
+    @Override public SkillType getSkillType() {return type;}
+    @Override public Integer getCooldown() {return cooldown;}
 }

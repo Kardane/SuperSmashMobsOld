@@ -3,6 +3,10 @@ package org.karn.supersmashmobs.api;
 import org.karn.supersmashmobs.game.kit.AbstractKit;
 
 public interface HudApi {
+    boolean canFinalSmash();
+
+    void setFinalSmash(boolean value);
+
     AbstractKit getKit();
 
     void setKit(AbstractKit kit);
@@ -15,8 +19,6 @@ public interface HudApi {
 
     int getSkillCoolC();
 
-    int getSkillCoolD();
-
     void setHurtValue(int value);
 
     void setSkillCoolA(int value);
@@ -24,6 +26,4 @@ public interface HudApi {
     void setSkillCoolB(int value);
 
     void setSkillCoolC(int value);
-
-    void setSkillCoolD(int value);
 }

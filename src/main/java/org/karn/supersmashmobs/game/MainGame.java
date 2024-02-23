@@ -1,6 +1,5 @@
 package org.karn.supersmashmobs.game;
 
-import net.minecraft.entity.attribute.EntityAttribute;
 import net.minecraft.entity.attribute.EntityAttributes;
 import net.minecraft.entity.boss.BossBar;
 import net.minecraft.entity.boss.CommandBossBar;
@@ -12,8 +11,8 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.PlayerManager;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
+import net.minecraft.text.Style;
 import net.minecraft.text.Text;
-import net.minecraft.text.TextColor;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.Vec2f;
@@ -22,14 +21,13 @@ import net.minecraft.world.GameMode;
 import net.minecraft.world.GameRules;
 import net.minecraft.world.border.WorldBorder;
 import org.karn.supersmashmobs.api.HudApi;
+import org.karn.supersmashmobs.game.kit.AbstractKit;
 import org.karn.supersmashmobs.registry.SSMAttributes;
 import org.karn.supersmashmobs.registry.SSMSounds;
 import org.karn.supersmashmobs.util.GameMessages;
 import org.karn.supersmashmobs.util.MessageSender;
-import org.karn.supersmashmobs.util.misc;
+import org.karn.supersmashmobs.util.Misc;
 
-import javax.management.Attribute;
-import java.time.LocalDate;
 import java.util.*;
 
 import static org.karn.supersmashmobs.SuperSmashMobs.MODID;
@@ -48,7 +46,7 @@ public class MainGame {
         isPlaying = true;
         gameUUID = UUID.randomUUID();
         System.out.println(System.currentTimeMillis());
-        Map<PlayerEntity, Vec3d> map = misc.spreadPlayers(server.getOverworld(), server.getPlayerManager().getPlayerList(),ringPos,16,80,60);
+        Map<PlayerEntity, Vec3d> map = Misc.spreadPlayers(server.getOverworld(), server.getPlayerManager().getPlayerList(),ringPos,16,80,60);
         System.out.println(System.currentTimeMillis());
         for (var a:map.entrySet()) {
             //a.getKey().teleport(server.getOverworld(), a.getValue().x,a.getValue().y,a.getValue().z,Set.of(),a.getKey().getYaw(),a.getKey().getPitch());
@@ -57,19 +55,28 @@ public class MainGame {
         System.out.println(System.currentTimeMillis());
         server.getPlayerManager().getPlayerList().forEach(p->{
             HudApi a = (HudApi) p;
+            AbstractKit kit = a.getKit();
             a.setSkillCoolA(140);
             a.setSkillCoolB(140);
             a.setSkillCoolC(140);
-            a.setSkillCoolD(140);
             p.addStatusEffect(new StatusEffectInstance(StatusEffects.SLOWNESS, 140, 100));
             p.addStatusEffect(new StatusEffectInstance(StatusEffects.RESISTANCE, 140, 100));
             p.addStatusEffect(new StatusEffectInstance(StatusEffects.JUMP_BOOST, 140, 200));
+
+            Style style = Text.empty().getStyle().withItalic(false);
+            p.getInventory().clear();
+
+            server.getCommandManager().executeWithPrefix(server.getCommandSource().withSilent().withEntity(p), "give @s supersmashmob:"+kit.id+"_a{display:{Name:'{\"text\":\""+kit.SkillA.getName()+"\",\"italic\":false}',Lore:['{\"text\":\""+kit.SkillA.getDesc()+"\",\"color\":\"white\",\"italic\":false}','{\"text\":\"쿨다운: "+kit.SkillA.getCooldown()/20+"초\",\"color\":\"aqua\",\"italic\":false}']}}");
+            server.getCommandManager().executeWithPrefix(server.getCommandSource().withSilent().withEntity(p), "give @s supersmashmob:"+kit.id+"_b{display:{Name:'{\"text\":\""+kit.SkillB.getName()+"\",\"italic\":false}',Lore:['{\"text\":\""+kit.SkillB.getDesc()+"\",\"color\":\"white\",\"italic\":false}','{\"text\":\"쿨다운: "+kit.SkillB.getCooldown()/20+"초\",\"color\":\"aqua\",\"italic\":false}']}}");
+            server.getCommandManager().executeWithPrefix(server.getCommandSource().withSilent().withEntity(p), "give @s supersmashmob:"+kit.id+"_c{display:{Name:'{\"text\":\""+kit.SkillC.getName()+"\",\"italic\":false}',Lore:['{\"text\":\""+kit.SkillC.getDesc()+"\",\"color\":\"white\",\"italic\":false}','{\"text\":\"쿨다운: "+kit.SkillC.getCooldown()/20+"초\",\"color\":\"aqua\",\"italic\":false}']}}");
+            server.getCommandManager().executeWithPrefix(server.getCommandSource().withSilent().withEntity(p), "give @s supersmashmob:"+kit.id+"_d{display:{Name:'{\"text\":\""+kit.SkillD.getName()+"\",\"italic\":false}',Lore:['{\"text\":\""+kit.SkillD.getDesc()+"\",\"color\":\"white\",\"italic\":false}','{\"text\":\"쿨다운: "+kit.SkillD.getCooldown()/20+"초\",\"color\":\"aqua\",\"italic\":false}']}}");
+            server.getCommandManager().executeWithPrefix(server.getCommandSource().withSilent().withEntity(p), "give @s supersmashmob:"+kit.id+"_e{display:{Name:'{\"text\":\""+kit.SkillE.getName()+"\",\"italic\":false}',Lore:['{\"text\":\""+kit.SkillE.getDesc()+"\",\"color\":\"white\",\"italic\":false}','{\"text\":\"쿨다운: "+kit.SkillE.getCooldown()/20+"초\",\"color\":\"aqua\",\"italic\":false}']}}");
         });
 
         Timer count5 = new Timer();
         TimerTask task5 = new TimerTask() {
             public void run() {
-                misc.playSoundToAll(server, SSMSounds.COUNTDOWN_5, SoundCategory.MASTER,2,1F);
+                Misc.playSoundToAll(server, SSMSounds.COUNTDOWN_5, SoundCategory.MASTER,2,1F);
                 MessageSender.sendTitleAll(server, Text.literal("5").formatted(Formatting.DARK_GREEN), Text.literal("가만히 계세요"));
             }
         };
@@ -77,7 +84,7 @@ public class MainGame {
 
         TimerTask task4 = new TimerTask() {
             public void run() {
-                misc.playSoundToAll(server, SSMSounds.COUNTDOWN_4, SoundCategory.MASTER,2,1F);
+                Misc.playSoundToAll(server, SSMSounds.COUNTDOWN_4, SoundCategory.MASTER,2,1F);
                 MessageSender.sendTitleAll(server, Text.literal("4").formatted(Formatting.GREEN),Text.literal("가만히 계세요"));
             }
         };
@@ -85,7 +92,7 @@ public class MainGame {
 
         TimerTask task3 = new TimerTask() {
             public void run() {
-                misc.playSoundToAll(server, SSMSounds.COUNTDOWN_3, SoundCategory.MASTER,2,1F);
+                Misc.playSoundToAll(server, SSMSounds.COUNTDOWN_3, SoundCategory.MASTER,2,1F);
                 MessageSender.sendTitleAll(server, Text.literal("3").formatted(Formatting.YELLOW), Text.literal("가만히 계세요"));
             }
         };
@@ -93,7 +100,7 @@ public class MainGame {
 
         TimerTask task2 = new TimerTask() {
             public void run() {
-                misc.playSoundToAll(server, SSMSounds.COUNTDOWN_2, SoundCategory.MASTER,2,1F);
+                Misc.playSoundToAll(server, SSMSounds.COUNTDOWN_2, SoundCategory.MASTER,2,1F);
                 MessageSender.sendTitleAll(server, Text.literal("2").formatted(Formatting.GOLD), Text.literal("가만히 계세요"));
             }
         };
@@ -101,7 +108,7 @@ public class MainGame {
 
         TimerTask task1 = new TimerTask() {
             public void run() {
-                misc.playSoundToAll(server, SSMSounds.COUNTDOWN_1, SoundCategory.MASTER,2,1F);
+                Misc.playSoundToAll(server, SSMSounds.COUNTDOWN_1, SoundCategory.MASTER,2,1F);
                 MessageSender.sendTitleAll(server, Text.literal("1").formatted(Formatting.RED), Text.literal("가만히 계세요"));
             }
         };
@@ -109,7 +116,7 @@ public class MainGame {
 
         TimerTask prepareTask = new TimerTask() {
             public void run() {
-                misc.playSoundToAll(server, SSMSounds.COUNTDOWN_READY, SoundCategory.MASTER,2,1F);
+                Misc.playSoundToAll(server, SSMSounds.COUNTDOWN_READY, SoundCategory.MASTER,2,1F);
             }
         };
         count5.schedule(prepareTask, 115*50);
@@ -118,7 +125,7 @@ public class MainGame {
             public void run() {
                 startGame(server);
                 BGMManager.playBGM(server,BGMManager.shuffleMap(), gameUUID);
-                misc.playSoundToAll(server, SSMSounds.COUNTDOWN_GO, SoundCategory.MASTER,2,1F);
+                Misc.playSoundToAll(server, SSMSounds.COUNTDOWN_GO, SoundCategory.MASTER,2,1F);
             }
         };
         count5.schedule(task, 130*50);
@@ -143,19 +150,17 @@ public class MainGame {
         server.getPlayerManager().getPlayerList().forEach(p->{
             p.changeGameMode(GameMode.ADVENTURE);
             HudApi a = (HudApi) p;
-            a.setSkillCoolA(100);
-            a.setSkillCoolB(100);
-            a.setSkillCoolC(100);
-            a.setSkillCoolD(100);
-            p.getAttributeInstance(SSMAttributes.ATTACK_DMG).setBaseValue(a.getKit().AttackDamage);
-            p.getAttributeInstance(SSMAttributes.ATTACK_SPEED).setBaseValue(a.getKit().AttackSpeed);
-            p.getAttributeInstance(SSMAttributes.HEALTH_REGEN).setBaseValue(a.getKit().HealthRegen);
-            p.getAttributeInstance(SSMAttributes.KNOCKBACK_TAKEN).setBaseValue(a.getKit().KnockbackMultiplier);
+            AbstractKit kit = a.getKit();
+            p.getAttributeInstance(SSMAttributes.ATTACK_DMG).setBaseValue(kit.AttackDamage);
+            p.getAttributeInstance(SSMAttributes.ATTACK_SPEED).setBaseValue(kit.AttackSpeed);
+            p.getAttributeInstance(SSMAttributes.HEALTH_REGEN).setBaseValue(kit.HealthRegen);
+            p.getAttributeInstance(SSMAttributes.KNOCKBACK_TAKEN).setBaseValue(kit.KnockbackMultiplier);
             //p.getAttributeInstance(SSMAttributes.PROTECTION).setBaseValue(0);
-            p.getAttributeInstance(EntityAttributes.GENERIC_MAX_HEALTH).setBaseValue(a.getKit().Health);
-            p.getAttributeInstance(EntityAttributes.GENERIC_MOVEMENT_SPEED).setBaseValue(a.getKit().Speed);
+            p.getAttributeInstance(EntityAttributes.GENERIC_MAX_HEALTH).setBaseValue(kit.Health);
+            p.getAttributeInstance(EntityAttributes.GENERIC_MOVEMENT_SPEED).setBaseValue(kit.Speed);
             p.heal(10000);
             p.clearStatusEffects();
+
             p.networkHandler.sendPacket(new StopSoundS2CPacket(null, null));
             p.playSound(SoundEvents.ENTITY_ENDER_DRAGON_GROWL, SoundCategory.MASTER,1,1F);
         });
@@ -186,7 +191,7 @@ public class MainGame {
             p.kill();
         });
         joinedPlayer = new HashMap<>();
-        misc.playSoundToAll(server, SSMSounds.GAMESET, SoundCategory.MASTER,2,1F);
+        Misc.playSoundToAll(server, SSMSounds.GAMESET, SoundCategory.MASTER,2,1F);
     }
 
     public static void updateGame(MinecraftServer server){

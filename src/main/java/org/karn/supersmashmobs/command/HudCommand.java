@@ -37,15 +37,6 @@ public class HudCommand {
                                 })
                         )
                 )
-                .then(CommandManager.literal("skillD")
-                        .then(CommandManager.argument("num", IntegerArgumentType.integer(0))
-                                .executes(ctx -> {
-                                    HudApi a = (HudApi) ctx.getSource().getPlayerOrThrow();
-                                    a.setSkillCoolD(IntegerArgumentType.getInteger(ctx,"num"));
-                                    return 1;
-                                })
-                        )
-                )
                 .then(CommandManager.literal("skill")
                         .then(CommandManager.argument("num", IntegerArgumentType.integer(0))
                                 .executes(ctx -> {
@@ -53,7 +44,6 @@ public class HudCommand {
                                     a.setSkillCoolA(IntegerArgumentType.getInteger(ctx,"num"));
                                     a.setSkillCoolB(IntegerArgumentType.getInteger(ctx,"num"));
                                     a.setSkillCoolC(IntegerArgumentType.getInteger(ctx,"num"));
-                                    a.setSkillCoolD(IntegerArgumentType.getInteger(ctx,"num"));
                                     return 1;
                                 })
                         )
