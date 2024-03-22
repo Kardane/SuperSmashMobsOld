@@ -7,6 +7,7 @@ import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.network.packet.s2c.play.StopSoundS2CPacket;
+import net.minecraft.registry.Registries;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.PlayerManager;
 import net.minecraft.sound.SoundCategory;
@@ -22,7 +23,10 @@ import net.minecraft.world.GameRules;
 import net.minecraft.world.border.WorldBorder;
 import org.karn.supersmashmobs.api.HudApi;
 import org.karn.supersmashmobs.game.kit.AbstractKit;
+import org.karn.supersmashmobs.game.kit.drowned.DrownedKit;
+import org.karn.supersmashmobs.game.kit.none.NoneKit;
 import org.karn.supersmashmobs.registry.SSMAttributes;
+import org.karn.supersmashmobs.registry.SSMEffects;
 import org.karn.supersmashmobs.registry.SSMSounds;
 import org.karn.supersmashmobs.util.GameMessages;
 import org.karn.supersmashmobs.util.MessageSender;
@@ -33,9 +37,12 @@ import java.util.*;
 import static org.karn.supersmashmobs.SuperSmashMobs.MODID;
 
 public class MainGame {
+    public static Timer gameTimer = new Timer();
     public static boolean isPlaying = false;
+    public static boolean isDebug = false;
     public static Map<PlayerEntity,Integer> joinedPlayer = new HashMap<>();
     public static int maxLife = 3;
+    public static int FinalSmashTime = 200;
     public static Vec2f ringPos = new Vec2f(0,0);
     public static boolean getGameStatus(){
         return isPlaying;
@@ -56,14 +63,15 @@ public class MainGame {
         server.getPlayerManager().getPlayerList().forEach(p->{
             HudApi a = (HudApi) p;
             AbstractKit kit = a.getKit();
+            if(kit.getId().equals("none")){
+                System.out.println("changed");
+                a.setKit(new DrownedKit());
+            }
             a.setSkillCoolA(140);
             a.setSkillCoolB(140);
             a.setSkillCoolC(140);
-            p.addStatusEffect(new StatusEffectInstance(StatusEffects.SLOWNESS, 140, 100));
-            p.addStatusEffect(new StatusEffectInstance(StatusEffects.RESISTANCE, 140, 100));
-            p.addStatusEffect(new StatusEffectInstance(StatusEffects.JUMP_BOOST, 140, 200));
+            p.addStatusEffect(new StatusEffectInstance(SSMEffects.GAME_PREPARE, 140, 100,false,false));
 
-            Style style = Text.empty().getStyle().withItalic(false);
             p.getInventory().clear();
 
             server.getCommandManager().executeWithPrefix(server.getCommandSource().withSilent().withEntity(p), "give @s supersmashmob:"+kit.id+"_a{display:{Name:'{\"text\":\""+kit.SkillA.getName()+"\",\"italic\":false}',Lore:['{\"text\":\""+kit.SkillA.getDesc()+"\",\"color\":\"white\",\"italic\":false}','{\"text\":\"쿨다운: "+kit.SkillA.getCooldown()/20+"초\",\"color\":\"aqua\",\"italic\":false}']}}");
@@ -143,7 +151,7 @@ public class MainGame {
         CommandBossBar bar = server.getBossBarManager().add(new Identifier(MODID,"crystal"),Text.literal("스매시 크리스탈 재생성"));
         bar.setColor(BossBar.Color.PINK);
         bar.setValue(0);
-        bar.setMaxValue(300);
+        bar.setMaxValue(FinalSmashTime);
         bar.addPlayers(server.getPlayerManager().getPlayerList());
         setGamerule(server);
         setPlayerLife(server);
@@ -163,10 +171,12 @@ public class MainGame {
 
             p.networkHandler.sendPacket(new StopSoundS2CPacket(null, null));
             p.playSound(SoundEvents.ENTITY_ENDER_DRAGON_GROWL, SoundCategory.MASTER,1,1F);
+
+            server.getCommandManager().executeWithPrefix(server.getCommandSource().withSilent().withEntity(p), "disguise @s as "+ Registries.ENTITY_TYPE.getId(kit.disguiseType));
         });
         MessageSender.sendMsgAll(server, GameMessages.getGameStartMsg());
         isPlaying = true;
-        updateGame(server);
+        if(!isDebug) updateGame(server);
         SmashCrystal.tick(server);
         //tickGame(server);
     }

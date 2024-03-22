@@ -24,9 +24,4 @@ public class NoneSkillA extends AbstractSkill {
         ((HudApi) player).setSkillCoolA(cooldown);
     }
 
-    @Override public String getId() {return id;}
-    @Override public String getName() {return name;}
-    @Override public String getDesc() {return desc;}
-    @Override public SkillType getSkillType() {return type;}
-    @Override public Integer getCooldown() {return cooldown;}
 }

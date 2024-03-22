@@ -1,12 +1,11 @@
 package org.karn.supersmashmobs.mixin;
 
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.ItemEntity;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.damage.DamageTypes;
-import net.minecraft.item.ItemStack;
 import net.minecraft.server.network.ServerPlayerEntity;
 import org.karn.supersmashmobs.api.HudApi;
+import org.karn.supersmashmobs.game.MainGame;
 import org.karn.supersmashmobs.game.kit.AbstractKit;
 import org.karn.supersmashmobs.game.kit.none.NoneKit;
 import org.karn.supersmashmobs.registry.SSMAttributes;
@@ -19,6 +18,8 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -28,6 +29,9 @@ import static org.karn.supersmashmobs.hud.Hud.BIGDEALWAITTICK;
 @Mixin(ServerPlayerEntity.class)
 public class PlayerMainMixin implements HudApi {
     private final ServerPlayerEntity player = (ServerPlayerEntity) (Object) this;
+    public Map<String,Object> tempData = new HashMap<>();
+    @Override public Map<String,Object> getTempData() {return this.tempData;}
+    @Override public void setTempData(Map<String, Object> data) {this.tempData = data;}
     public AbstractKit kit = new NoneKit();
     public boolean canFinalSmash = false;
     @Override public boolean canFinalSmash() {return this.canFinalSmash;}
@@ -91,7 +95,7 @@ public class PlayerMainMixin implements HudApi {
                     timer.schedule(task, BIGDEALWAITTICK * 50);
                 }
 
-                if(finalAmount >= player.getHealth()){
+                if(finalAmount >= player.getHealth() && MainGame.isPlaying){
                     PlayerTick.onPlayerDeath(player,source);
                 } else {
                     player.damage(player.getDamageSources().generic(),finalAmount);
@@ -111,8 +115,8 @@ public class PlayerMainMixin implements HudApi {
             ci.cancel();
         }
     }
-    @Inject(method = "dropItem", at = @At("HEAD"), cancellable = true)
-    private void SSM$dropItem(ItemStack stack, boolean throwRandomly, boolean retainOwnership, CallbackInfoReturnable<ItemEntity> cir){
-        cir.setReturnValue(null);
+    @Inject(method = "dropSelectedItem", at = @At("HEAD"), cancellable = true)
+    private void SSM$dropItem(boolean entireStack, CallbackInfoReturnable<Boolean> cir){
+        cir.cancel();
     }
 }

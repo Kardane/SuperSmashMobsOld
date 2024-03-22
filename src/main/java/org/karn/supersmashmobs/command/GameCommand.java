@@ -8,6 +8,7 @@ import net.minecraft.text.Text;
 import org.karn.supersmashmobs.api.HudApi;
 import org.karn.supersmashmobs.game.MainGame;
 import org.karn.supersmashmobs.game.SmashCrystal;
+import org.karn.supersmashmobs.util.MessageSender;
 
 public class GameCommand {
     public static void register(CommandDispatcher<ServerCommandSource> dispatcher) {
@@ -48,6 +49,22 @@ public class GameCommand {
                             SmashCrystal.startSpawn(ctx.getSource().getServer());
                             return 1;
                         })
+                )
+                .then(CommandManager.literal("debug")
+                        .executes(ctx->{
+                            MainGame.isDebug = !MainGame.isDebug;
+                            ctx.getSource().sendMessage(Text.literal("Debug mode: " + MainGame.isDebug));
+                            return 1;
+                        })
+                )
+                .then(CommandManager.literal("setCrystalTime")
+                        .then(CommandManager.argument("time", IntegerArgumentType.integer(1))
+                                .executes(ctx->{
+                                    MainGame.FinalSmashTime = IntegerArgumentType.getInteger(ctx, "time");
+                                    MessageSender.sendMsgAll(ctx.getSource().getServer(), Text.literal("다음 스매시 크리스탈 생성 대기시간: " + MainGame.FinalSmashTime));
+                                    return 1;
+                                })
+                        )
                 )
                 .then(CommandManager.literal("bots")
                         .then(CommandManager.argument("count", IntegerArgumentType.integer(1))

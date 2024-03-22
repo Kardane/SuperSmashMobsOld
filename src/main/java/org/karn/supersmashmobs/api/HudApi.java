@@ -2,7 +2,13 @@ package org.karn.supersmashmobs.api;
 
 import org.karn.supersmashmobs.game.kit.AbstractKit;
 
+import java.util.Map;
+
 public interface HudApi {
+    Map<String,Object> getTempData();
+
+    void setTempData(Map<String, Object> data);
+
     boolean canFinalSmash();
 
     void setFinalSmash(boolean value);

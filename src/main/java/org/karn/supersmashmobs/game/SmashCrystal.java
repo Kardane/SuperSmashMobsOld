@@ -74,11 +74,11 @@ public class SmashCrystal {
             Timer timer = new Timer();
             TimerTask task = new TimerTask() {
                 public void run() {
-                    var pa1 = Arc.CircleDots(new Vec3d(pos.x,y,pos.y), 2, 110, 0.25);
-                    var pa2 = Arc.CircleDots(new Vec3d(pos.x,y,pos.y), 2.25, 120, 0.25);
-                    var pa3 = Arc.CircleDots(new Vec3d(pos.x,y,pos.y), 2.5, 130, 0.25);
-                    var pa4 = Arc.CircleDots(new Vec3d(pos.x,y,pos.y), 2.75, 140, 0.25);
-                    var pa5 = Arc.CircleDots(new Vec3d(pos.x,y,pos.y), 3, 150, 0.25);
+                    var pa1 = Arc.CircleDots(new Vec3d(pos.x,y,pos.y), 2, 110, 0.2);
+                    var pa2 = Arc.CircleDots(new Vec3d(pos.x,y,pos.y), 2.25, 120, 0.2);
+                    var pa3 = Arc.CircleDots(new Vec3d(pos.x,y,pos.y), 2.5, 130, 0.2);
+                    var pa4 = Arc.CircleDots(new Vec3d(pos.x,y,pos.y), 2.75, 140, 0.2);
+                    var pa5 = Arc.CircleDots(new Vec3d(pos.x,y,pos.y), 3, 150, 0.2);
                     ParticleDrawer.DotArrayDraw(server.getOverworld(),ParticleTypes.DRAGON_BREATH,pa1,true);
                     ParticleDrawer.DotArrayDraw(server.getOverworld(),ParticleTypes.DRAGON_BREATH,pa2,true);
                     ParticleDrawer.DotArrayDraw(server.getOverworld(),ParticleTypes.DRAGON_BREATH,pa3,true);

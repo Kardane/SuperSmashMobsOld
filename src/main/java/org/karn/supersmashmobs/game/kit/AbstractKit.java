@@ -83,20 +83,20 @@ public abstract class AbstractKit {
     public abstract void onHurt(ServerPlayerEntity player);
     public abstract void onAttack(ServerPlayerEntity player);
 
-    public abstract String getId();
-    public abstract String getName();
-    public abstract String getDesc();
-    public abstract String getSmashicon();
-    public abstract EntityType getDisguiseMob();
-    public abstract AbstractSkill getSkillA();
-    public abstract AbstractSkill getSkillB();
-    public abstract AbstractSkill getSkillC();
-    public abstract AbstractSkill getSkillD();
-    public abstract AbstractSkill getSkillE();
+    public String getId(){return id;};
+    public String getName(){return name;};
+    public String getDesc(){return desc;};
+    public String getSmashicon(){return smashicon;};
+    public EntityType getDisguiseMob(){return disguiseType;};
+    public AbstractSkill getSkillA(){return SkillA;};
+    public AbstractSkill getSkillB(){return SkillB;};
+    public AbstractSkill getSkillC(){return SkillC;};
+    public AbstractSkill getSkillD(){return SkillD;};
+    public AbstractSkill getSkillE(){return SkillE;};
 
-    public abstract Item getSkillAItem();
-    public abstract Item getSkillBItem();
-    public abstract Item getSkillCItem();
-    public abstract Item getSkillDItem();
-    public abstract Item getSkillEItem();
+    public Item getSkillAItem(){return SkillAItem;};
+    public Item getSkillBItem(){return SkillBItem;};
+    public Item getSkillCItem(){return SkillCItem;};
+    public Item getSkillDItem(){return SkillDItem;};
+    public Item getSkillEItem(){return SkillEItem;}
 }

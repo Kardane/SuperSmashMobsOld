@@ -1,20 +1,22 @@
-package org.karn.supersmashmobs.game.kit.none;
+package org.karn.supersmashmobs.game.kit.drowned;
 
 import eu.pb4.polymer.core.api.item.PolymerItem;
 import eu.pb4.polymer.resourcepack.api.PolymerModelData;
 import eu.pb4.polymer.resourcepack.api.PolymerResourcePackUtils;
 import net.minecraft.client.item.TooltipContext;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
+import net.minecraft.particle.DustParticleEffect;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import org.jetbrains.annotations.Nullable;
+import org.joml.Vector3f;
 import org.karn.supersmashmobs.game.kit.AbstractKit;
 import org.karn.supersmashmobs.game.kit.AbstractSkill;
+import org.karn.supersmashmobs.game.kit.none.*;
 import org.karn.supersmashmobs.registry.SSMItems;
 
 import java.util.ArrayList;
@@ -22,34 +24,36 @@ import java.util.List;
 
 import static org.karn.supersmashmobs.SuperSmashMobs.MODID;
 
-public class NoneKit extends AbstractKit {
-    public static String id = "none";
-    public static String name = "None";
-    public static String desc = "Default kit. No special ability.";
-    public static String icon = "\u5000";
-    public static String smashicon = "\u5001";
-    public static EntityType disguiseType = EntityType.ZOMBIE;
+public class DrownedKit extends AbstractKit {
+    public static String id = "drowned";
+    public static String name = "드라운드";
+    public static String desc = "드라운드입니다.";
+    public static String icon = "\u5002";
+    public static String smashicon = "\u5003";
+    public static EntityType disguiseType = EntityType.DROWNED;
 
-    public static Item SkillAItem = SSMItems.NONE_A;
-    public static Item SkillBItem = SSMItems.NONE_B;
-    public static Item SkillCItem = SSMItems.NONE_C;
-    public static Item SkillDItem = SSMItems.NONE_D;
-    public static Item SkillEItem = SSMItems.NONE_E;
+    public static Item SkillAItem = SSMItems.DROWNED_A;
+    public static Item SkillBItem = SSMItems.DROWNED_B;
+    public static Item SkillCItem = SSMItems.DROWNED_C;
+    public static Item SkillDItem = SSMItems.DROWNED_D;
+    public static Item SkillEItem = SSMItems.DROWNED_E;
 
-    public static AbstractSkill SkillA = new NoneSkillA();
-    public static AbstractSkill SkillB = new NoneSkillB();
-    public static AbstractSkill SkillC = new NoneSkillC();
-    public static AbstractSkill SkillD = new NoneSkillD();
-    public static AbstractSkill SkillE = new NoneSkillE();
+    public static AbstractSkill SkillA = new DrownedSkillA();
+    public static AbstractSkill SkillB = new DrownedSkillB();
+    public static AbstractSkill SkillC = new DrownedSkillC();
+    public static AbstractSkill SkillD = new DrownedSkillD();
+    public static AbstractSkill SkillE = new DrownedSkillE();
 
-    public static Integer Health = 100;
+    public static Integer Health = 300;
     public static Integer HealthRegen = 1;
     public static Integer KnockbackMultiplier = 100;
-    public static Float AttackSpeed = 20f;
+    public static Float AttackSpeed = 15f;
     public static Float AttackDamage = 10f;
     public static Float Speed = 0.1f;
-    public NoneKit(){
-        super(id, name, desc, icon,smashicon,EntityType.ZOMBIE,
+
+    public static DustParticleEffect drownedDust = new DustParticleEffect(new Vector3f(0.0F, 0.75F, 1F), 1.0F);
+    public DrownedKit(){
+        super(id, name, desc, icon,smashicon,disguiseType,
                 Health,HealthRegen,KnockbackMultiplier,AttackSpeed,AttackDamage,Speed,
                 SkillAItem,SkillBItem,SkillCItem,SkillDItem,SkillEItem,
                 SkillA,SkillB,SkillC,SkillD,SkillE);
@@ -71,51 +75,51 @@ public class NoneKit extends AbstractKit {
 
     //================================================================================================
 
-    public static class NoneAItem extends Item implements PolymerItem {
+    public static class DrownedAItem extends Item implements PolymerItem {
         private final PolymerModelData polymerModel;
-        public NoneAItem() {
+        public DrownedAItem() {
             super(new Item.Settings().maxCount(1));
-            this.polymerModel = PolymerResourcePackUtils.requestModel(Items.PAPER, new Identifier(MODID, "item/none/a"));
+            this.polymerModel = PolymerResourcePackUtils.requestModel(Items.PAPER, new Identifier(MODID, "item/"+id+"/a"));
         }
         @Override public Item getPolymerItem(ItemStack itemStack, @Nullable ServerPlayerEntity player) {return this.polymerModel.item();}
         @Override public int getPolymerCustomModelData(ItemStack itemStack, @Nullable ServerPlayerEntity player) {return this.polymerModel.value();}
     }
 
-    public static class NoneEItem extends Item implements PolymerItem {
+    public static class DrownedEItem extends Item implements PolymerItem {
         private final PolymerModelData polymerModel;
-        public NoneEItem() {
+        public DrownedEItem() {
             super(new Item.Settings().maxCount(1));
-            this.polymerModel = PolymerResourcePackUtils.requestModel(Items.PAPER, new Identifier(MODID, "item/none/e"));
+            this.polymerModel = PolymerResourcePackUtils.requestModel(Items.PAPER, new Identifier(MODID, "item/"+id+"/e"));
         }
         @Override public Item getPolymerItem(ItemStack itemStack, @Nullable ServerPlayerEntity player) {return this.polymerModel.item();}
         @Override public int getPolymerCustomModelData(ItemStack itemStack, @Nullable ServerPlayerEntity player) {return this.polymerModel.value();}
     }
 
-    public static class NoneBItem extends Item implements PolymerItem {
+    public static class DrownedBItem extends Item implements PolymerItem {
         private final PolymerModelData polymerModel;
-        public NoneBItem() {
+        public DrownedBItem() {
             super(new Item.Settings().maxCount(1));
-            this.polymerModel = PolymerResourcePackUtils.requestModel(Items.PAPER, new Identifier(MODID, "item/none/b"));
+            this.polymerModel = PolymerResourcePackUtils.requestModel(Items.PAPER, new Identifier(MODID, "item/"+id+"/b"));
         }
         @Override public Item getPolymerItem(ItemStack itemStack, @Nullable ServerPlayerEntity player) {return this.polymerModel.item();}
         @Override public int getPolymerCustomModelData(ItemStack itemStack, @Nullable ServerPlayerEntity player) {return this.polymerModel.value();}
     }
 
-    public static class NoneCItem extends Item implements PolymerItem {
+    public static class DrownedCItem extends Item implements PolymerItem {
         private final PolymerModelData polymerModel;
-        public NoneCItem() {
+        public DrownedCItem() {
             super(new Item.Settings().maxCount(1));
-            this.polymerModel = PolymerResourcePackUtils.requestModel(Items.PAPER, new Identifier(MODID, "item/none/c"));
+            this.polymerModel = PolymerResourcePackUtils.requestModel(Items.PAPER, new Identifier(MODID, "item/"+id+"/c"));
         }
         @Override public Item getPolymerItem(ItemStack itemStack, @Nullable ServerPlayerEntity player) {return this.polymerModel.item();}
         @Override public int getPolymerCustomModelData(ItemStack itemStack, @Nullable ServerPlayerEntity player) {return this.polymerModel.value();}
     }
 
-    public static class NoneDItem extends Item implements PolymerItem {
+    public static class DrownedDItem extends Item implements PolymerItem {
         private final PolymerModelData polymerModel;
-        public NoneDItem() {
+        public DrownedDItem() {
             super(new Item.Settings().maxCount(1));
-            this.polymerModel = PolymerResourcePackUtils.requestModel(Items.PAPER, new Identifier(MODID, "item/none/d"));
+            this.polymerModel = PolymerResourcePackUtils.requestModel(Items.PAPER, new Identifier(MODID, "item/"+id+"/d"));
         }
         @Override public Item getPolymerItem(ItemStack itemStack, @Nullable ServerPlayerEntity player) {return this.polymerModel.item();}
         @Override public int getPolymerCustomModelData(ItemStack itemStack, @Nullable ServerPlayerEntity player) {return this.polymerModel.value();}

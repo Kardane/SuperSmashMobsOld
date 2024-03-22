@@ -27,10 +27,22 @@ public class LineHitbox {
     }
 
     public static List<LivingEntity> getLivingEntities(World level, Vec3d start, Vec3d end, double width, int step){
-        return (List<LivingEntity>) getEntities(level,start,end,width,step).stream().filter(entity -> entity.isLiving());
+        List<LivingEntity> a = new ArrayList<>();
+        getEntities(level,start,end,width,step).forEach(entity -> {
+            if(entity instanceof LivingEntity){
+                a.add((LivingEntity) entity);
+            }
+        });
+        return a;
     }
 
     public static List<PlayerEntity> getPlayers(World level, Vec3d start, Vec3d end, double width, int step){
-        return (List<PlayerEntity>) getEntities(level,start,end,width,step).stream().filter(entity -> entity.isPlayer());
+        List<PlayerEntity> a = new ArrayList<>();
+        getEntities(level,start,end,width,step).forEach(entity -> {
+            if(entity instanceof PlayerEntity){
+                a.add((PlayerEntity) entity);
+            }
+        });
+        return a;
     }
 }

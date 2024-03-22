@@ -27,8 +27,8 @@ public class Misc {
         double m = MathHelper.sqrt((float) (a.x*a.x + a.y*a.y + a.z*a.z));
         return new Vec3d(-a.x/m,-a.y/m,-a.z/m);
     }
-    public static Vec3d getLocalPos(Vec3d pos, Vec2f rot, double forward, double up, double right){
-        return getLocalPos(pos,rot,new Vec3d(forward,up,right));
+    public static Vec3d getLocalPos(Vec3d pos, Vec2f rot, double right, double up, double forward){
+        return getLocalPos(pos,rot,new Vec3d(right,up,forward));
     }
     public static Vec3d getLocalPos(Vec3d pos, Vec2f rot, Vec3d movement) {
         float var4 = MathHelper.cos((rot.y + 90.0F) * (float) (Math.PI / 180.0));
@@ -50,23 +50,6 @@ public class Misc {
     }
     public static int randomInt(int min, int max){
         return (int) (Math.random() * (max - min + 1)) + min;
-    }
-
-    public static boolean hasBindEffect(ServerPlayerEntity player){
-        var map = player.getActiveStatusEffects();
-        boolean hasBind = false;
-        for (Map.Entry entry : map.entrySet()) {
-            if (entry.getKey() instanceof AbstractSSMEffect) {
-                if (AbstractSSMEffect.getType().equals(SSMEffectType.BIND) ||
-                        AbstractSSMEffect.getType().equals(SSMEffectType.STUN) ||
-                        AbstractSSMEffect.getType().equals(SSMEffectType.STOP) ||
-                        AbstractSSMEffect.getType().equals(SSMEffectType.KNOCKBACK) ||
-                        AbstractSSMEffect.getType().equals(SSMEffectType.KNOCKUP)) {
-                    hasBind = true;
-                }
-            }
-        }
-        return hasBind;
     }
 
     public static void playSoundToAll(MinecraftServer server, SoundEvent sound, SoundCategory category, float volume, float pitch){

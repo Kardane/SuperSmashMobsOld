@@ -1,11 +1,15 @@
 package org.karn.supersmashmobs.command;
 
 import com.mojang.brigadier.CommandDispatcher;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.server.command.CommandManager;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.text.Text;
+import net.minecraft.util.Formatting;
 import org.karn.supersmashmobs.api.HudApi;
 import org.karn.supersmashmobs.game.MainGame;
+import org.karn.supersmashmobs.game.kit.AbstractKit;
+import org.karn.supersmashmobs.game.kit.drowned.DrownedKit;
 import org.karn.supersmashmobs.game.kit.none.NoneKit;
 
 public class KitCommand {
@@ -25,12 +29,25 @@ public class KitCommand {
                 .then(CommandManager.literal("none")
                         .executes(ctx->{
                             var player = ctx.getSource().getPlayerOrThrow();
-                            HudApi a = (HudApi) player;
-                            a.setKit(new NoneKit());
-                            ctx.getSource().sendMessage(Text.of("Kit changed to None"));
+                            changeKit(player, new NoneKit());
+                            return 1;
+                        })
+                )
+                .then(CommandManager.literal("drowned")
+                        .executes(ctx->{
+                            var player = ctx.getSource().getPlayerOrThrow();
+                            changeKit(player, new DrownedKit());
                             return 1;
                         })
                 )
         );
+    }
+
+    public static int changeKit(PlayerEntity player, AbstractKit kit) {
+        if(MainGame.isPlaying) return 1;
+        HudApi a = (HudApi) player;
+        a.setKit(kit);
+        player.sendMessage(Text.literal("선택: " + kit.name).formatted(Formatting.GOLD).formatted(Formatting.BOLD));
+        return 2;
     }
 }

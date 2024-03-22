@@ -23,5 +23,9 @@
   "game.go": {"sounds": ["supersmashmob:game/go"]},
   "game.ready": {"sounds": ["supersmashmob:game/ready"]},
   "game.prepare": {"sounds": ["supersmashmob:game/prepare"]},
-  "game.charsel": {"sounds": ["supersmashmob:game/charsel"]}
+  "game.charsel": {
+    "sounds": [
+      "supersmashmob:game/charsel"
+    ]
+  }
 }

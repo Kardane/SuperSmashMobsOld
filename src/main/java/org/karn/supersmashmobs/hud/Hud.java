@@ -2,6 +2,8 @@ package org.karn.supersmashmobs.hud;
 
 import net.minecraft.entity.attribute.EntityAttribute;
 import net.minecraft.entity.attribute.EntityAttributes;
+import net.minecraft.entity.effect.StatusEffect;
+import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.item.Items;
 import net.minecraft.server.network.ServerPlayerEntity;
@@ -12,8 +14,13 @@ import net.minecraft.text.TextColor;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.Identifier;
 import org.karn.supersmashmobs.api.HudApi;
+import org.karn.supersmashmobs.effect.AbstractSSMEffect;
+import org.karn.supersmashmobs.game.EffectManager;
 import org.karn.supersmashmobs.game.MainGame;
 import org.karn.supersmashmobs.registry.SSMAttributes;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import static org.karn.supersmashmobs.SuperSmashMobs.MODID;
 
@@ -26,6 +33,8 @@ public class Hud {
     public static Style guiStat1 = emptyStyle.withFont(new Identifier(MODID,"gui_stat1")).withColor(TextColor.parse("#4e5c24"));
     public static Style guiStat2 = emptyStyle.withFont(new Identifier(MODID,"gui_stat2")).withColor(TextColor.parse("#4e5c24"));
     public static Style guiStat3 = emptyStyle.withFont(new Identifier(MODID,"gui_stat3")).withColor(TextColor.parse("#4e5c24"));
+    public static Style guiStat0 = emptyStyle.withFont(new Identifier(MODID,"gui_stat0")).withColor(TextColor.parse("#4e5c24"));
+    public static Style guiStat_1 = emptyStyle.withFont(new Identifier(MODID,"gui_stat-1")).withColor(TextColor.parse("#4e5c24"));
     public static Style guiHealth = emptyStyle.withFont(new Identifier(MODID,"gui_health")).withColor(TextColor.parse("#4e5c24"));
     public static Text hotbarUp = Text.literal("\u4000").setStyle(guiStyle);
 
@@ -165,9 +174,10 @@ public class Hud {
         return base;
     }
 
+
     private static MutableText buildCooldown(ServerPlayerEntity player){
         HudApi a = (HudApi) player;
-        MutableText base = Text.empty().append(Text.translatable("space.-248"));
+        MutableText base = Text.empty().append(Text.translatable("space.-248"));//.append(Text.translatable("space.-248"))
         base.append(getCooldownDisplay(a.getSkillCoolA()))
                 .append(Text.translatable("space.1"))
                 .append(getCooldownDisplay(a.getSkillCoolB()))
@@ -184,9 +194,19 @@ public class Hud {
                     .append(Text.literal("\u4108").setStyle(guiStyle))
                     .append(Text.literal("사용불가").setStyle(guiSkillStyle).formatted(Formatting.RED));
         }
-        base.append(Text.translatable("space.-64"));
 
-        return base.append(Text.translatable("space.-"+(4 + (String.valueOf(a.getSkillCoolA()/20).length()-1)*8 + (String.valueOf(a.getSkillCoolB()/20).length()-1)*8 + (String.valueOf(a.getSkillCoolC()/20).length()-1)*8) ));
+        int effectSpace =0;
+        if(EffectManager.getSSMEffects(player) != null) {
+            base.append(Text.translatable("space.42"));
+            Map<AbstractSSMEffect, StatusEffectInstance> map = EffectManager.getSSMEffects(player);
+            for (Map.Entry<AbstractSSMEffect, StatusEffectInstance> entry : map.entrySet()) {
+                base.append(Text.literal(entry.getKey().getIcon()).setStyle(guiSkillStyle)).append(Text.translatable("space.-1"));
+                effectSpace+=16;
+            }
+            effectSpace+=42;
+        }
+
+        return base.append(Text.translatable("space.-"+(64+4 + effectSpace +(String.valueOf(a.getSkillCoolA()/20).length()-1)*8 + (String.valueOf(a.getSkillCoolB()/20).length()-1)*8 + (String.valueOf(a.getSkillCoolC()/20).length()-1)*8) ));
     }
 
     private static MutableText getCooldownDisplay(int cooldown){

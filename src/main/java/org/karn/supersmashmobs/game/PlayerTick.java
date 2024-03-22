@@ -21,7 +21,7 @@ public class PlayerTick {
     public static void mainTick(ServerPlayerEntity player){
         if(player.isSpectator()) return;
 
-        if(player.isOnGround() && !player.getAbilities().allowFlying && !Misc.hasBindEffect(player)){
+        if(player.isOnGround() && !player.getAbilities().allowFlying && !EffectManager.hasBind(player)){
             player.getAbilities().allowFlying = true;
             player.sendAbilitiesUpdate();
         } else if(player.getAbilities().flying){
@@ -40,22 +40,23 @@ public class PlayerTick {
             player.heal((float) player.getAttributeValue(SSMAttributes.HEALTH_REGEN));
         }
 
-
         if(player.getInventory().selectedSlot != 4){
             HudApi a = (HudApi) player;
-            switch (player.getInventory().selectedSlot){
-                case 0:
-                    if(a.getSkillCoolA() <= 0) SkillRouter.routeSkillA(player);
-                    break;
-                case 1:
-                    if(a.getSkillCoolB() <= 0) SkillRouter.routeSkillB(player);
-                    break;
-                case 2:
-                    if(a.getSkillCoolC() <= 0) SkillRouter.routeSkillC(player);
-                    break;
-                case 3:
-                    if(a.canFinalSmash()) SkillRouter.routeSmash(player);
-                    break;
+            if(!EffectManager.hasSilence(player)) {
+                switch (player.getInventory().selectedSlot) {
+                    case 0:
+                        if (a.getSkillCoolA() <= 0) SkillRouter.routeSkillA(player);
+                        break;
+                    case 1:
+                        if (a.getSkillCoolB() <= 0) SkillRouter.routeSkillB(player);
+                        break;
+                    case 2:
+                        if (a.getSkillCoolC() <= 0) SkillRouter.routeSkillC(player);
+                        break;
+                    case 3:
+                        if (a.canFinalSmash()) SkillRouter.routeSmash(player);
+                        break;
+                }
             }
             player.getInventory().selectedSlot = 4;
             player.networkHandler.sendPacket(new UpdateSelectedSlotS2CPacket(4));
@@ -69,7 +70,7 @@ public class PlayerTick {
     public static void onPlayerDeath(ServerPlayerEntity player, DamageSource source){
         MessageSender.sendKillLog(player,source);
 
-        if(!MainGame.isPlaying) return;
+        if(!MainGame.isPlaying || MainGame.joinedPlayer.get(player) == null) return;
         int life = MainGame.joinedPlayer.get(player);
         MainGame.joinedPlayer.replace(player,life-1);
 

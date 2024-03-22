@@ -18,17 +18,18 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(PlayerEntity.class)
 public class PlayerMixin {
     private final PlayerEntity player = (PlayerEntity) (Object) this;
-    @Inject(method = "collideWithEntity", at = @At("TAIL"), cancellable = true)
+    @Inject(method = "collideWithEntity", at = @At("HEAD"), cancellable = true)
     private void SSM$Pickup(Entity entity, CallbackInfo ci) {
-        if(entity instanceof ItemEntity && !entity.isRemoved()){
+        if(entity instanceof ItemEntity && !player.getWorld().isClient){
             ItemEntity itemEntity = (ItemEntity) entity;
             if(itemEntity.getStack().isOf(Items.NETHER_STAR)){
-                player.getStatusEffects().add(new StatusEffectInstance(StatusEffects.GLOWING, 60, 0, false, false));
-                player.getWorld().playSound(null, player.getBlockPos(), SoundEvents.BLOCK_BEACON_ACTIVATE, SoundCategory.MASTER, 1.0F, 1.0F);
+                var glow = new StatusEffectInstance(StatusEffects.GLOWING, 60, 0, false, false);
+                player.addStatusEffect(glow);
+                player.getWorld().playSound(null, player.getBlockPos(), SoundEvents.BLOCK_RESPAWN_ANCHOR_CHARGE, SoundCategory.MASTER, 3.0F, 1.0F);
                 ((HudApi) player).setFinalSmash(true);
+                entity.kill();
                 ci.cancel();
             }
         }
     }
-
 }

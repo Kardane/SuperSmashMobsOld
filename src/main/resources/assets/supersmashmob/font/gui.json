@@ -14,7 +14,9 @@
 		{"type": "bitmap","file": "supersmashmob:font/icon/ult.png","ascent": 3,"height": 16,"chars": ["\u4108"]},
 
 		{"type": "bitmap","file": "supersmashmob:font/icon/kit/none.png","ascent": -22,"height": 43,"chars": ["\u5000"]},
-		{"type": "bitmap","file": "supersmashmob:font/icon/kit/none_final.png","ascent": 0,"height": 64,"chars": ["\u5001"]}
+		{"type": "bitmap","file": "supersmashmob:font/icon/kit/none_final.png","ascent": 0,"height": 64,"chars": ["\u5001"]},
+		{"type": "bitmap","file": "supersmashmob:font/icon/kit/drowned.png","ascent": -22,"height": 43,"chars": ["\u5002"]},
+		{"type": "bitmap","file": "supersmashmob:font/icon/kit/drowned_final.png","ascent": 0,"height": 64,"chars": ["\u5003"]}
 
 	]
 }
